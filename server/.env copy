@@ -1,0 +1,1 @@
+DB_STRING = 'mongodb+srv://root:root@cluster0.zhqzx.mongodb.net/vn-ecomm?retryWrites=true&w=majority'

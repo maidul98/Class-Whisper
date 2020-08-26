@@ -1,0 +1,59 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css');
+/*=======NEWS FEED POST=========*/
+.post{
+  margin-bottom: 20px;
+  padding:5px;
+  border: solid .5px black;
+  border-radius: 5px;
+}
+
+.postContainer{
+  width: 750px;
+  margin:0 auto;
+}
+
+.voteIcon{
+  font-size: 18px;
+  margin-left:5px;
+}
+
+.postVotes{
+  margin:5px 0
+}
+
+.postedIn{
+  font-weight: bold;
+  font-size:12px;
+}
+
+.postTitle{
+  margin-top: 5px;
+}
+
+.postStats{
+  font-size:12px;
+  margin-top: 15px;
+}
+
+.postCommentsIcon{
+  margin-right:5px;
+}
+
+/*=======NEWS FEED LAYOUT========*/
+.newsFeedContainer{
+  max-width: 980px;
+  margin:0 auto;
+}
+
+
+/*=======NAV BAR========*/
+.navigation{
+  margin-bottom: 20px;
+}
+
+/*========NEWS FEED FILTER======*/
+.newsfeedBtnFilter {
+  border-radius: 20px !important;
+  margin-right:10px;
+  margin-bottom: 10px;
+}

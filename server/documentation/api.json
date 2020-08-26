@@ -1,0 +1,225 @@
+{
+  "info": {
+    "title": "API documentation",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "description": "A full list of API documentation of all routes and their inputs and example outputs"
+  },
+  "paths": {
+    "/users/protected": {
+      "get": {
+        "summary": "/users/protected",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "example": "secured"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "produces": [
+          "text/html"
+        ],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "/users/login",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "Maidul"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "******"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "5f093552d95fbf10ce7427f6"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "Maidul"
+                    },
+                    "hash": {
+                      "type": "string",
+                      "example": "0454306f17e27dc555c071ffd67664a712fb4fbd993dbfdd3711b2a84dc3bf522f5db803a0cafb219405a9dd0daa906a2833f0e77d2f27607a5fa2d3c82b4b57"
+                    },
+                    "salt": {
+                      "type": "string",
+                      "example": "7987447e112ed5987285350821d60b26d5faa39abc4dc81cbb99fa6096b008f3"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "example": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZjA5MzU1MmQ5NWZiZjEwY2U3NDI3ZjYiLCJpYXQiOjE1OTQ2NDI5ODk1MDAsImV4cCI6MTU5NDY0MzA3NTkwMH0.k1JaCWAirFSxsUwYpC238vnzH7zT9w5YGQg9aeOELYXCnOr6OdN4e8yNdz86is_phnHkaIil8SE4820ekpXi4LdRbtdpbnpJWEqSIOHXnOraVGcd6Jhqti0TTsCW0CSXXPTBUiKxJxkJnsZOe4nO-u6zpYW4T0UTHFUOzT5F-bfz1i7zZZPzjU-N-nDQuVVxM5gc5ZmvvptNizLH2Lq3hqrEpIKo5iqBU9HzgROrlbaTOQJg54LkWqD1jkoik-UJTNwqjQlYDZBnActhJiQ8hZh_KtdTk40oiEkNvS8EThR6CcGuMqb-ajHpOJxMBEfw3EheJIkJdk2dCpgUcRE1zQ6cceKJ7J0SV5D_fcvUObA7QVLx6XthAgucRB6EeOEPW6enmJ_H0chCuGLzQa-zhw9i_AbBAQjJPkgeD3Azsgq_UqGZvYLCIA-VgKc1UVObFjE3kU1fCdtZFBkqCwGJeM0NcPa_pSSyyTVV6oSAxceJV8xUPsI1NQH6R2IP4Z-dMnwLLRP51t4iAELWHVpkJvvvLu1_g_Sffs7YFdkO443EHXQCqv-_d4vZxuSw_URon4QU0iYS6Xy2fLYnnuQ9cYNrA98uGnlD2NT-IS1-rXs3hEwL_wSDgwRRxag_AedyiH-thz2vpCuA_-4fx46Csnb6b2RGo_8UeLNqQNdHyx4"
+                },
+                "expiresIn": {
+                  "type": "string",
+                  "example": "1d"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "msg": {
+                  "type": "string",
+                  "example": "Username or password is incorrect"
+                }
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "/users/register",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "Maidul9898"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "******"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "5f0c52cb6d00c6041448a839"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "Maidul9898"
+                    },
+                    "hash": {
+                      "type": "string",
+                      "example": "a5870762468cf549e022981746eeecc34970607f6ea54dc65cf9dec2beca44f400dc0749dc08eb54c0a1e9cc21e32109c8a89bd54eba22ecacc97111df671529"
+                    },
+                    "salt": {
+                      "type": "string",
+                      "example": "c0543107e89de0ec0d49412b1a78612faf362ebf15b24802a519de1f0732cbc1"
+                    },
+                    "__v": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "example": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZjBjNTJjYjZkMDBjNjA0MTQ0OGE4MzkiLCJpYXQiOjE1OTQ2NDMxNDc1NjUsImV4cCI6MTU5NDY0MzIzMzk2NX0.fA0jUHax20WaI-IzhgmVUQA3QUYgjDEjXfORHZ1Ls2vrjYX7__1aNe-f-m6G98uUwtE4S_4AwsSLJU0bqceVvAL5GQyai3lSK2zyJ9an7PmM5BOknWXen7Jzb9VrL2sbF7fHedM6wnI-8MDJySAM_7mjc72GoU1PNRNLSvQH8kk5DOApV09xfSf2MZODUjzkL5AoK30C7iz5TwXWGVOrbR3nfIwUELMuN0ICHjRo31czwvIlGw-zzesUMeuJiaKD9407B42Ldb1GyFNuIGGWPVYBdIoFi8lRv_sdkmGA7yX841LY8vBkPe2kFqpDt_mOi2qqiUXmwJksvO94QAtECTt9qTRSlqwblfDcffXpcbU07BPYUFqUeKUGVF_SF-GcMTloXZuCHcTh-jBaAGxKGnjTqv90mSYV_QyppLk_Yu-T6XlD4XsXDXz1mtUxBOjP81eIH82leHsOPfIsxJ49G3ZkOXYK8Daqc0hGCFtOoawjp5i_U84yXys58YMLtwSTq307q2fww9o3Ku9Hz6vQonmUtW4XFdw7NEWsCKTw70psha11Qy2W4Bi8fIav7ZZ8T2qJ7rT_D6LtmiW3iFTgt080SN10OHxo7dGQRV-j6PRW-JxwQ9HB_hTHCyR8yBpktBu4yqxc8zShWc-gWHXLKIAFNDyrlVmHGWdKyPYBpv0"
+                },
+                "expiresIn": {
+                  "type": "string",
+                  "example": "1d"
+                }
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0",
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:3000",
+  "securityDefinitions": {
+    "authorization": {
+      "name": "authorization",
+      "in": "header",
+      "type": "apiKey"
+    }
+  }
+}
