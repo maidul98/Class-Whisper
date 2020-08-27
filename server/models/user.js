@@ -6,4 +6,4 @@ const UserSchema = new mongoose.Schema({
     salt: String
 });
 
-mongoose.model('User', UserSchema);
+mongoose.model('User', UserSchema);ç
