@@ -23,6 +23,7 @@
               "example": "secured"
             }
           },
+          "304": {},
           "401": {
             "description": "Unauthorized"
           }

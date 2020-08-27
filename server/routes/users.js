@@ -5,6 +5,7 @@ const passport = require('passport');
 const utils = require('../lib/utils');
 
 router.get('/protected',passport.authenticate('jwt', {session:false}),  (req, res, next) => {
+    console.log(req.user)
     res.send('secured')
     next()
 });
