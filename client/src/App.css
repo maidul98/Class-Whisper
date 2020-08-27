@@ -39,6 +39,10 @@
   margin-right:5px;
 }
 
+.postTitle:hover{
+  cursor: pointer;
+}
+
 /*=======NEWS FEED LAYOUT========*/
 .newsFeedContainer{
   max-width: 980px;

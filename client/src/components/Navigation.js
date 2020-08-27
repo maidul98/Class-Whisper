@@ -7,7 +7,7 @@ function Navigation(props) {
   return (
     <Navbar bg="light" className="navigation">
         <div className="container">
-            <Navbar.Brand>Classroom</Navbar.Brand>
+          <LinkContainer to="/"><Navbar.Brand>Classroom</Navbar.Brand></LinkContainer>
             {/* <div>
                 <FormControl type="text" placeholder="Search"/>
             </div> */}

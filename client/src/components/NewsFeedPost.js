@@ -4,6 +4,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import 'font-awesome/css/font-awesome.min.css';
+import { LinkContainer } from 'react-router-bootstrap'
 
 function NewsFeedPost() {
   return (
@@ -21,9 +22,11 @@ function NewsFeedPost() {
             <div className="postedDetails">
               <span className="postedIn">class/CS 5150</span> <span>posted by mi252</span>
             </div>
-            <div className="postTitle">
-              <h5>This is the title</h5>
-            </div>
+            <LinkContainer to='/post'>
+              <div className="postTitle">
+                <h5>This is the title</h5>
+              </div>
+            </LinkContainer>
             <div className="postStats">
             <span className="commentsCount"><i class="fas fa-comment-alt postCommentsIcon"></i> 23 comments</span>
             </div>
