@@ -1,20 +1,38 @@
-import React, { Component } from "react";
+import React, { Component, useState} from "react";
 
 function Login() {
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+
+    function handleSubmit(event){
+        event.preventDefault();
+        console.log(email)
+
+        fetch('/users/login', {
+            method: 'POST',
+            body: JSON.stringify({"username": email, "password": password})
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+        })
+        .catch(console.log)
+    }
+
     return (
     <div className="auth-wrapper">
         <div className="auth-inner">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h3>Sign In</h3>
 
                 <div className="form-group">
                     <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <input  onChange={(event)=>setEmail(event.target.value)} className="form-control" placeholder="Enter email" />
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input type="password" onChange={(event)=>setPassword(event.target.value)} className="form-control" placeholder="Enter password" />
                 </div>
 
                 <div className="form-group">

@@ -8,12 +8,12 @@ import 'font-awesome/css/font-awesome.min.css';
 import NewsFeedPost from './NewsFeedPost'
 import SideBar from './Sidebar'
 
-function NewsFeed() {
+function NewsFeed({history}) {
   return (
     <div>
       <div className="newsFeedContainer">
-      <Button variant="secondary" className="newsfeedBtnFilter"> <i class="fas fa-fire"></i> Trending</Button>
-      <Button variant="secondary" className="newsfeedBtnFilter"> <i class="fas fa-rss"></i> New</Button>
+      <Button variant="secondary" className="newsfeedBtnFilter"> <i className="fas fa-fire"></i> Trending</Button>
+      <Button variant="secondary" className="newsfeedBtnFilter"> <i className="fas fa-rss"></i> New</Button>
       <br/>
         <div className="row">
           <div className="col-sm-8">
