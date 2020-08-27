@@ -10,6 +10,8 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import NewsFeed from './components/NewsFeed'
+import Login from './components/Login'
+import Register from './components/Register'
 
 function App() {
   return (
@@ -18,6 +20,12 @@ function App() {
         <Route exact path="/">
           <Navigation/>
           <NewsFeed/>
+        </Route>
+        <Route exact path="/login">
+          <Login/>
+        </Route>
+        <Route exact path="/register">
+          <Register/>
         </Route>
       </Switch>
   </Router>

@@ -51,9 +51,33 @@
   margin-bottom: 20px;
 }
 
+.authBtns{
+  margin-left:10px;
+}
+
 /*========NEWS FEED FILTER======*/
 .newsfeedBtnFilter {
   border-radius: 20px !important;
   margin-right:10px;
   margin-bottom: 10px;
+}
+
+/*========AUTH==================*/
+.auth-wrapper{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+  height: 100%;
+}
+
+.auth-inner {
+  width: 450px;
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
 }
