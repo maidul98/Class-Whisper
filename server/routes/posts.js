@@ -19,23 +19,36 @@ const utils = require('../lib/utils');
     
 // });
 
-// /**
-//  * TODO
-//  * get a post by ID
-//  */
-router.get('/', function(req, res, next){
-    // Post.findOne({_id: req.body.id})
-    //   .then((post)=>{
-    //     if(!post){
-    //         res.status(401).json({success: false, msg: "Post has not been created."})
-    //     }
-    //     else{
-    //       res.json({success: true})
-    //   }
-    let data = Post.findOne({_id:"5f496beb615872e97f5915c4"})
-    console.log(data)
+/**
+ * Get post by id
+ */
+router.get('/:id', function(req, res, next){
+    Post.findById(req.params.id)
+        .then(post=>{
+          console.log(post)
+          res.send(post)
+        })
+        .catch(err=>console.log(err))
 });
 
+/**
+ * Get all posts
+ */
+router.get('/', function(req, res, next){
+    Post.find({}, (error, posts)=>{
+        res.send(posts)
+    })
+});
+
+/**
+ * TO DO 
+ * return all posts ordered by time and highest votes
+ */
+
+
+/**
+ * Make a new post
+ */
 router.post('/', passport.authenticate('jwt', {session:false}), function(req, res, next){
     const newPost = new Post({
         title: req.body.title,

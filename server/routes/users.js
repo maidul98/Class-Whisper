@@ -5,7 +5,7 @@ const passport = require('passport');
 const utils = require('../lib/utils');
 
 router.get('/protected',passport.authenticate('jwt', {session:false}),  (req, res, next) => {
-    console.log(req.user)
+    console.log('seqaured')
     res.send('secured')
     next()
 });
@@ -14,9 +14,8 @@ router.post('/login', function(req, res, next){
     User.findOne({username: req.body.username})
         .then((user)=>{
             if(!user){
-                res.status(401).json({success: false, msg: "You are not registered"})
+                return res.status(401).json({success: false, msg: "You are not registered"})
             }
-
             const isValid = utils.validPassword(req.body.password, user.hash, user.salt)
             if(isValid){
                 const jwt = utils.issueJWT(user)

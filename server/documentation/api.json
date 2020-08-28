@@ -129,6 +129,20 @@
         },
         "produces": [
           "application/json"
+        ],
+        "security": [
+          {
+            "x-forwarded-host": []
+          },
+          {
+            "x-forwarded-proto": []
+          },
+          {
+            "x-forwarded-port": []
+          },
+          {
+            "x-forwarded-for": []
+          }
         ]
       }
     },
@@ -219,6 +233,26 @@
   "securityDefinitions": {
     "authorization": {
       "name": "authorization",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-forwarded-host": {
+      "name": "x-forwarded-host",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-forwarded-proto": {
+      "name": "x-forwarded-proto",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-forwarded-port": {
+      "name": "x-forwarded-port",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-forwarded-for": {
+      "name": "x-forwarded-for",
       "in": "header",
       "type": "apiKey"
     }
