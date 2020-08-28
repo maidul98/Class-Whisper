@@ -5,10 +5,17 @@ const mongoose = require('mongoose');
  * post title, user, votes..
  */
 const PostSchema = new mongoose.Schema({
-    username: String,
     title: String,
-    content: String,
-    votes: int,
+    body: String,
+    votes:{
+        type: Number,
+        default:0
+    },
+    user: Object,
+    comments:{
+        type: Array,
+        default: []
+    }
 });
 
 mongoose.model('Post', PostSchema);

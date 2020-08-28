@@ -43,6 +43,7 @@ require('./config/database');
 
 // loading the models
 require('./models/user');
+require('./models/Post');
 
 // Passing the global passport object into the configuration function
 require('./config/passport')(passport);
@@ -60,7 +61,6 @@ app.use(cors());
 /**
  * -------------- ROUTES ----------------
  */
-
 // Imports all of the routes from ./routes/index.js
 app.use(require('./routes'));
 
