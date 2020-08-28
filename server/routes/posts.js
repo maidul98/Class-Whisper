@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();   
 const User = mongoose.model('User');
+const Post = mongoose.model('Post');
 const passport = require('passport');
 const utils = require('../lib/utils');
 
@@ -14,7 +15,7 @@ const utils = require('../lib/utils');
  * TODO
  * search for post by term from all of our posts
  */
-router.post('/search', function(req, res, next){
+router.get('/search', function(req, res, next){
     
 });
 
@@ -23,21 +24,39 @@ router.post('/search', function(req, res, next){
  * get a post by ID
  */
 router.get('/post', function(req, res, next){
-    
+    Post.findOne({_id: req._id})
+      .then((post)=>{
+        if(!post){
+            res.status(401).json({success: false, msg: "Post has not been created."})
+        }
+        else{
+          res.json({success: true})
+      }
 });
 
-
-/**
- * TODO
- * make a new post
- */
 router.post('/post', function(req, res, next){
-    
+    // const newPost = new Post({
+    //   username: req.body.username,
+    //     title: req.body.title,
+    //     content: req.body.content,
+    //     votes: 0,
+    // });
+
+    // newPost.save()
+    //        .then(post=>{
+    //            res.send("Successfully posted!");
+    //            next();
+    //        })
+    //        .catch(err => next(err));
+
+    res.send("hi");
+
 });
 
 /**
  * TODO
  * update a post
+ * change the title or change the content
  */
 router.put('/post', function(req, res, next){
     

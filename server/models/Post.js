@@ -6,8 +6,9 @@ const mongoose = require('mongoose');
  */
 const PostSchema = new mongoose.Schema({
     username: String,
-    hash: String,
-    salt: String
+    title: String,
+    content: String,
+    votes: int,
 });
 
 mongoose.model('Post', PostSchema);
