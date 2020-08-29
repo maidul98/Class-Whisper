@@ -1,7 +1,7 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css');
 /*=======NEWS FEED POST=========*/
 .post{
-  margin-bottom: 20px;
+  margin: 20px 0;
   padding:5px;
   border: solid .5px black;
   border-radius: 5px;

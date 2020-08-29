@@ -2,17 +2,16 @@ import React, {useEffect, useState, useContext} from 'react';
 import Navbar from 'react-bootstrap/Navbar'
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import 'font-awesome/css/font-awesome.min.css';
 
 import NewsFeedPost from './NewsFeedPost'
 import SideBar from './Sidebar'
 
 import { UserContext } from "../UserContext";
+import CreateNewPost from './CreatePost'
 
 function NewsFeed({history}) {
   const [posts, setPosts] = useState([])
-
   const {user, setUser} = useContext(UserContext);
 
   useEffect(()=>{
@@ -27,6 +26,7 @@ function NewsFeed({history}) {
       <br/>
         <div className="row">
           <div className="col-sm-8">
+          <CreateNewPost/>
           {posts.map(post=><NewsFeedPost post={post}/>)}
           </div>
           <div className="col-sm-3">

@@ -88,7 +88,7 @@ router.get('/sort', function (req, res, next) {
 // /**
 //  * Make a new post
 //  */
-router.post('/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+router.post('/', function (req, res, next) {
     const newPost = new Post({
         title: req.body.title,
         body: req.body.body,

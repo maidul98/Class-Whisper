@@ -9,14 +9,15 @@ import ListGroup from 'react-bootstrap/ListGroup'
 function Sidebar() {
   return (
     <div>
-        <ListGroup defaultActiveKey="#link1">
+        <p>My classes</p>
+        <ListGroup>
         <ListGroup.Item action href="#link1">
         CS 1110
         </ListGroup.Item>
         <ListGroup.Item action href="#link2">
         SOC 2190
         </ListGroup.Item>
-        <ListGroup.Item action href="#link2">
+        <ListGroup.Item action href="#link3">
         CS 3110
         </ListGroup.Item > 
     </ListGroup>
