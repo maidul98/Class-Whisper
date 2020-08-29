@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import Navbar from 'react-bootstrap/Navbar'
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
@@ -8,7 +8,17 @@ import 'font-awesome/css/font-awesome.min.css';
 import NewsFeedPost from './NewsFeedPost'
 import SideBar from './Sidebar'
 
+import { UserContext } from "../UserContext";
+
 function NewsFeed({history}) {
+  const [posts, setPosts] = useState([])
+
+  const {user, setUser} = useContext(UserContext);
+
+  useEffect(()=>{
+    fetch('/posts').then(res=>res.json()).then(postData=>setPosts(postData))
+  }, [])
+
   return (
     <div>
       <div className="newsFeedContainer">
@@ -17,7 +27,7 @@ function NewsFeed({history}) {
       <br/>
         <div className="row">
           <div className="col-sm-8">
-            {[1,1,2,3,4,5,6,4,44,4,4,4].map(()=><NewsFeedPost/>)}
+          {posts.map(post=><NewsFeedPost post={post}/>)}
           </div>
           <div className="col-sm-3">
             <SideBar/>

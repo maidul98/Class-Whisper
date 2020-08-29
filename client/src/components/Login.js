@@ -1,20 +1,33 @@
-import React, { Component, useState} from "react";
+import React, { Component, useState, useContext} from "react";
+import { UserContext } from "../UserContext";
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
+    const { user, setUser } = useContext(UserContext);
 
     function handleSubmit(event){
         event.preventDefault();
-        console.log(email)
-
         fetch('/users/login', {
             method: 'POST',
-            body: JSON.stringify({"username": email, "password": password})
+            body: JSON.stringify({"username": email, "password": password}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
         })
-        .then(res => res.json())
-        .then((data) => {
-            console.log(data)
+        .then((res)=>{
+            if(res.status == 200 | res.status == 302){
+                return res.json()
+            }else{
+                return 
+            }
+        })
+        .then((userObj)=>{
+            if (Object.keys(userObj).length !=0){
+                setUser(userObj)
+                props.history.push('/')
+            }
         })
         .catch(console.log)
     }
@@ -26,8 +39,8 @@ function Login() {
                 <h3>Sign In</h3>
 
                 <div className="form-group">
-                    <label>Email address</label>
-                    <input  onChange={(event)=>setEmail(event.target.value)} className="form-control" placeholder="Enter email" />
+                    <label>Username</label>
+                    <input  onChange={(event)=>setEmail(event.target.value)} className="form-control" placeholder="Username" />
                 </div>
 
                 <div className="form-group">
@@ -43,9 +56,6 @@ function Login() {
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block">Submit</button>
-                <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p>
             </form>
         </div> 
     </div>

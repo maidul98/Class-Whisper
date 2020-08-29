@@ -1,36 +1,54 @@
-import React, { Component } from "react";
+import React, { Component, useState, useContext} from "react";
+import { UserContext } from "../UserContext";
 
-function Register() {
+function Register(props) {
+    const [username, setUsername] = useState(null)
+    const [password, setPassword] = useState(null)
+    const { user, setUser } = useContext(UserContext);
+
+    function handleSubmit(event){
+        event.preventDefault();
+        fetch('/users/register', {
+            method: 'POST',
+            body: JSON.stringify({"username": username, "password": password}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then((res)=>{
+            if(res.status == 200 | res.status == 302){
+                return res.json()
+            }else{
+                return 
+            }
+        })
+        .then((userObj)=>{
+            if (Object.keys(userObj).length !=0){
+                setUser(userObj)
+                props.history.push('/')
+            }
+        })
+        .catch(console.log)
+    }
+
     return (
     <div className="auth-wrapper">
         <div className="auth-inner">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h3>Sign Up</h3>
 
                 <div className="form-group">
-                    <label>First name</label>
-                    <input type="text" className="form-control" placeholder="First name" />
-                </div>
-
-                <div className="form-group">
-                    <label>Last name</label>
-                    <input type="text" className="form-control" placeholder="Last name" />
-                </div>
-
-                <div className="form-group">
-                    <label>Email address</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <label>Username</label>
+                    <input type="text" onChange={(event)=>setUsername(event.target.value)} className="form-control" placeholder="Username" />
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input type="password" onChange={(event)=>setPassword(event.target.value)} className="form-control" placeholder="Password" />
                 </div>
 
                 <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
-                <p className="forgot-password text-right">
-                    Already registered <a href="#">sign in?</a>
-                </p>
             </form>
         </div> 
     </div>
