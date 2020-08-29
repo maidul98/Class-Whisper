@@ -6,24 +6,24 @@ const Post = mongoose.model('Post');
 const passport = require('passport');
 const utils = require('../lib/utils');
 
-// router.get('/protected', passport.authenticate('jwt', {session:false}),  (req, res, next) => {
-//     console.log(req.user)
-//     res.send('secured')
-//     next()
-// });
+// // router.get('/protected', passport.authenticate('jwt', {session:false}),  (req, res, next) => {
+// //     console.log(req.user)
+// //     res.send('secured')
+// //     next()
+// // });
 
-// /**
-//  * TODO
-//  * search for post by term from all of our posts
-//  */
-// router.get('/search', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * search for post by term from all of our posts
+// //  */
+// // router.get('/search', function(req, res, next){
 
-// });
+// // });
 
 /**
  * Get post by id
  */
-router.get('/:id', function (req, res, next) {
+router.get('get/:id', function (req, res, next) {
     Post.findById(req.params.id)
         .then(post => {
             console.log(post)
@@ -65,14 +65,29 @@ router.get('/', function (req, res, next) {
 
 router.get('/sort', function (req, res, next) {
     Post.find({}, (error, posts) => {
-        res.send(posts)
-    })
+        res.send(posts.sort(function (a, b) {
+            // Formula is the same as the Reddit "Hot" algorithm, found here: 
+            // https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111e33d0d9
+            var seconds = Date.parse(a.createdAt) / 1000 - 1134028003;
+            var order = Math.log10(Math.max(Math.abs(a.votes), 1));
+            var sign = a.votes > 0 ? 1 : a.votes < 0 ? -1 : 0
+            var aScore = Math.round(sign * order + seconds / 45000, 7);
+            seconds = Date.parse(b.createdAt) / 1000 - 1134028003;
+            order = Math.log10(Math.max(Math.abs(b.votes), 1));
+            sign = b.votes > 0 ? 1 : b.votes < 0 ? -1 : 0
+            var bScore = Math.round(sign * order + seconds / 45000, 7);
+            var comp = 0;
+            if (aScore > bScore) comp = -1;
+            else if (aScore < bScore) comp = 1;
+            return comp;
+        }));
+    });
 });
 
 
-/**
- * Make a new post
- */
+// /**
+//  * Make a new post
+//  */
 router.post('/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     const newPost = new Post({
         title: req.body.title,
@@ -88,55 +103,55 @@ router.post('/', passport.authenticate('jwt', { session: false }), function (req
         .catch(err => next(err));
 });
 
-// /**
-//  * TODO
-//  * update a post
-//  * change the title or change the content
-//  */
-// router.put('/post', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * update a post
+// //  * change the title or change the content
+// //  */
+// // router.put('/post', function(req, res, next){
 
-// });
+// // });
 
 
-// /**
-//  * TODO
-//  * delete a post
-//  */
-// router.delete('/post', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * delete a post
+// //  */
+// // router.delete('/post', function(req, res, next){
 
-// });
+// // });
 
-// /**
-//  * TODO
-//  * create a comment
-//  */
-// router.post('/comment', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * create a comment
+// //  */
+// // router.post('/comment', function(req, res, next){
 
-// });
+// // });
 
-// /**
-//  * TODO
-//  * create a comment
-//  */
-// router.post('/comment', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * create a comment
+// //  */
+// // router.post('/comment', function(req, res, next){
 
-// });
+// // });
 
-// /**
-//  * TODO
-//  * delete by id
-//  */
-// router.delete('/comment', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * delete by id
+// //  */
+// // router.delete('/comment', function(req, res, next){
 
-// });
+// // });
 
-// /**
-//  * TODO
-//  * get all comments for post ID
-//  */
-// router.get('/post-comments', function(req, res, next){
+// // /**
+// //  * TODO
+// //  * get all comments for post ID
+// //  */
+// // router.get('/post-comments', function(req, res, next){
 
-// });
+// // });
 
 
 
