@@ -26,6 +26,13 @@
           "304": {},
           "401": {
             "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>MongoTimeoutError: Server selection timed out after 30000 ms<br> &nbsp; &nbsp;at Timeout._onTimeout (/Users/maidulislam/Desktop/hackathon/server/node_modules/mongodb/lib/core/sdam/server_selection.js:308:9)<br> &nbsp; &nbsp;at listOnTimeout (internal/timers.js:551:17)<br> &nbsp; &nbsp;at processTimers (internal/timers.js:494:7)</pre>\n</body>\n</html>\n"
+            }
           }
         },
         "produces": [
@@ -34,6 +41,18 @@
         "security": [
           {
             "authorization": []
+          },
+          {
+            "x-forwarded-host": []
+          },
+          {
+            "x-forwarded-proto": []
+          },
+          {
+            "x-forwarded-port": []
+          },
+          {
+            "x-forwarded-for": []
           }
         ]
       }
@@ -125,10 +144,18 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>MongoTimeoutError: Server selection timed out after 30000 ms<br> &nbsp; &nbsp;at Timeout._onTimeout (/Users/maidulislam/Desktop/hackathon/server/node_modules/mongodb/lib/core/sdam/server_selection.js:308:9)<br> &nbsp; &nbsp;at listOnTimeout (internal/timers.js:551:17)<br> &nbsp; &nbsp;at processTimers (internal/timers.js:494:7)</pre>\n</body>\n</html>\n"
+            }
           }
         },
         "produces": [
-          "application/json"
+          "application/json",
+          "text/html"
         ],
         "security": [
           {
@@ -221,6 +248,20 @@
         },
         "produces": [
           "application/json"
+        ],
+        "security": [
+          {
+            "x-forwarded-host": []
+          },
+          {
+            "x-forwarded-proto": []
+          },
+          {
+            "x-forwarded-port": []
+          },
+          {
+            "x-forwarded-for": []
+          }
         ]
       }
     }
