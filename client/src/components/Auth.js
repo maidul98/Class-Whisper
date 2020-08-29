@@ -1,21 +1,26 @@
+import React from "react";
+
 class Auth {
     constructor() {
-      this.authenticated = false;
+      this.user = {}
     }
   
-    login(cb) {
-      this.authenticated = true;
-      cb();
+    login(token) {
+      localStorage.setItem('token', token);
     }
   
-    logout(cb) {
-      this.authenticated = false;
-      cb();
+    logout() {
+      localStorage.removeItem('token');
     }
   
     isAuthenticated() {
-      return this.authenticated;
+      if (localStorage.getItem('token') != null){
+        return true
+      }else{
+        return false
+      }
     }
+
   }
   
   export default new Auth();
