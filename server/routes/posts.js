@@ -60,9 +60,14 @@ router.get('/', function (req, res, next) {
 });
 
 /**
- * TO DO 
  * return all posts ordered by time and highest votes
  */
+
+router.get('/sort', function (req, res, next) {
+    Post.find({}, (error, posts) => {
+        res.send(posts)
+    })
+});
 
 
 /**
