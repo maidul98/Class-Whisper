@@ -92,6 +92,7 @@ router.post('/', function (req, res, next) {
     const newPost = new Post({
         title: req.body.title,
         body: req.body.body,
+        class: req.body.class,
         user: req.user,
     });
 
