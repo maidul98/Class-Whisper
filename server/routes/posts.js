@@ -92,6 +92,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), function (req
     const newPost = new Post({
         title: req.body.title,
         body: req.body.body,
+        class: req.body.class,
         user: req.user,
     });
 
