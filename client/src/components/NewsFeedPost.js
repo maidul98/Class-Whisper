@@ -18,7 +18,8 @@ function NewsFeedPost(props) {
           <div className="col-sm-1">
             <div className="postVotes">
             <i class="fas fa-arrow-up voteIcon"></i>
-            <p class="postVotes">{props.post.votes}</p>
+            {/* <p class="postVotes">{props.post.votes}</p> */}
+            <p class="postVotes">100</p>
             <i class="fas fa-arrow-down voteIcon"></i>
             </div>
           </div>
@@ -28,7 +29,8 @@ function NewsFeedPost(props) {
             </div>
             <LinkContainer to='/post'>
               <div className="postTitle">
-                <h5>{props.post.title}</h5>
+                {/* <h5>{props.post.title}</h5> */}
+                <h5>Title</h5>
               </div>
             </LinkContainer>
             <div className="postStats">

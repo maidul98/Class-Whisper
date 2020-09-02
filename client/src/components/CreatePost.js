@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { LinkContainer } from 'react-router-bootstrap'
 import { UserContext } from "../UserContext";
 import Form from 'react-bootstrap/Form';
+import { Comment } from 'semantic-ui-react'
 
 function CreateNewPost(props) {
   const { user, setUser } = useContext(UserContext);
@@ -37,7 +38,7 @@ function CreateNewPost(props) {
             <div class="row">
               <div className="col-sm-9">
                 <Form.Group controlId="title">
-                    <Form.Control onClick={()=>setHide(false)} onChange={event=>setTitle(event.target.value)} placeholder="Your awsome title goes here!" />
+                    <Form.Control onClick={()=>setHide(false)} onChange={event=>setTitle(event.target.value)} placeholder="Make a post" />
                 </Form.Group>
               </div>
               <div className="col-sm-3">

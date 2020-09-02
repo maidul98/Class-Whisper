@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar'
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 import 'font-awesome/css/font-awesome.min.css';
 import ListGroup from 'react-bootstrap/ListGroup'
 
@@ -21,6 +21,15 @@ function Sidebar() {
         CS 3110
         </ListGroup.Item > 
     </ListGroup>
+    <br/>
+    <Card>
+      <Card.Body>
+        <Card.Title>About this course</Card.Title>
+        <Card.Text>
+        Advanced programming course that emphasizes functional programming techniques and data structures. Programming topics include recursive and higher-order procedures, models of programming language evaluation and compilation, type systems, and polymorphism. Data structures and algorithms covered include graph algorithms, balanced trees, memory heaps, and garbage collection. Also covers techniques for analyzing program performance and correctness.
+        </Card.Text>
+      </Card.Body>
+    </Card>
     </div>
   );
 }

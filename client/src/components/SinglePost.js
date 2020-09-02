@@ -1,10 +1,9 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import FormControl from "react-bootstrap/FormControl";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Comments from './comments/Comments'
+import Comments from './Comments'
 import "font-awesome/css/font-awesome.min.css";
+import { Button, Form } from 'semantic-ui-react'
 
 function SinglePost() {
   return (
@@ -57,7 +56,11 @@ function SinglePost() {
             </div>
           </div>
           <div className="addComment">
-            <textarea></textarea>
+          <Form reply>
+            <Form.TextArea />
+            <Button className="pull-right" content='Add Reply' primary disabled />
+            <div className="clearfix"></div>
+          </Form>
           </div>
           <div className="postComments">
               <Comments/>
