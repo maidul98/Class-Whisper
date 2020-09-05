@@ -72,7 +72,7 @@ app.use(require("./routes"));
 const mongoose = require("mongoose");
 const Class = mongoose.model("Class");
 
-await Class.countDocuments(async function (err, count) {
+Class.countDocuments(async function (err, count) {
   if (!err && count === 0) {
     const subjectsResponse = await axios(
       "https://classes.cornell.edu/api/2.0/config/subjects.json?roster=FA20"
@@ -110,20 +110,20 @@ await Class.countDocuments(async function (err, count) {
       await Class.create(classes);
     }
   }
+}).then(() => {
+  console.log("done");
+
+  /**
+   * Serve react app
+   */
+  if (process.env.NODE_ENV === "production") {
+    console.log("prod");
+    app.use(express.static("client/build"));
+  }
+
+  /**
+   * -------------- SERVER ----------------
+   */
+
+  app.listen(process.env.PORT || 3000);
 });
-
-console.log("done");
-
-/**
- * Serve react app
- */
-if (process.env.NODE_ENV === "production") {
-  console.log("prod");
-  app.use(express.static("client/build"));
-}
-
-/**
- * -------------- SERVER ----------------
- */
-
-app.listen(process.env.PORT || 3000);
