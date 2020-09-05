@@ -66,7 +66,7 @@ app.use(cors());
 app.use(require("./routes"));
 
 // OAS
-expressOasGenerator.handleRequests();
+// expressOasGenerator.handleRequests();
 
 // Save all classes from roster for every subject into DB
 const mongoose = require("mongoose");
