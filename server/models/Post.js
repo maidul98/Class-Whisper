@@ -1,26 +1,35 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const User = require("./user");
 
 /**
  * TODO
  * post title, user, votes..
  */
 const PostSchema = new mongoose.Schema({
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    title: String,
-    body: String,
-    votes: {
-        type: Number,
-        default: 0
-    },
-    user: Object,
-    comments: {
-        type: Array,
-        default: []
-    },
-    class: String
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  body: String,
+  votes: {
+    type: Number,
+    default: 0,
+  },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  comments: [],
+  class_id: {
+    type: mongoose.Types.ObjectId,
+    ref: "Class",
+    required: true,
+  },
 });
 
-mongoose.model('Post', PostSchema);
+mongoose.model("Post", PostSchema);

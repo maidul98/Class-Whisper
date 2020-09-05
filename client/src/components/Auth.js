@@ -13,12 +13,21 @@ class Auth {
       localStorage.removeItem('token');
     }
   
-    isAuthenticated() {
-      if (localStorage.getItem('token') != null){
-        return true
-      }else{
-        return false
+    async isAuthenticated() {
+      const res =  await fetch('users/protected',{
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token')
+      }}).then(response=>{
+        return response
+      })
+
+      console.log(res.status)
+      if (res.status != 200){
+        return false 
       }
+      return true
     }
 
   }

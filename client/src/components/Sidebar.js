@@ -1,37 +1,69 @@
-import React from 'react';
-import Navbar from 'react-bootstrap/Navbar'
-import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import 'font-awesome/css/font-awesome.min.css';
-import ListGroup from 'react-bootstrap/ListGroup'
+import React, { useContext } from "react";
+import Navbar from "react-bootstrap/Navbar";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import "font-awesome/css/font-awesome.min.css";
+import ListGroup from "react-bootstrap/ListGroup";
+import { UserContext } from "../UserContext";
+import { withRouter } from "react-router-dom";
 
-function Sidebar() {
+function Sidebar({ history, classes, classInfo }) {
+  const { user, setUser } = useContext(UserContext);
   return (
     <div>
-        <p>My classes</p>
-        <ListGroup>
-        <ListGroup.Item action href="#link1">
-        CS 1110
-        </ListGroup.Item>
-        <ListGroup.Item action href="#link2">
-        SOC 2190
-        </ListGroup.Item>
-        <ListGroup.Item action href="#link3">
-        CS 3110
-        </ListGroup.Item > 
-    </ListGroup>
-    <br/>
-    <Card>
-      <Card.Body>
-        <Card.Title>About this course</Card.Title>
-        <Card.Text>
-        Advanced programming course that emphasizes functional programming techniques and data structures. Programming topics include recursive and higher-order procedures, models of programming language evaluation and compilation, type systems, and polymorphism. Data structures and algorithms covered include graph algorithms, balanced trees, memory heaps, and garbage collection. Also covers techniques for analyzing program performance and correctness.
-        </Card.Text>
-      </Card.Body>
-    </Card>
+      <div style={{ display: user?._id == undefined ? "none" : "initial" }}>
+        <Card>
+          <Card.Header as="h6">My classes</Card.Header>
+          {classes.map((singleCLass) => (
+            <ListGroup.Item
+              key={singleCLass._id}
+              action
+              onClick={() =>
+                history.push(
+                  `/class/${singleCLass.term.toLowerCase()}/${singleCLass.subject.toLowerCase()}/${
+                    singleCLass.catalogNbr
+                  }`
+                )
+              }
+            >
+              {`${singleCLass.subject} ${singleCLass.catalogNbr}`}
+            </ListGroup.Item>
+          ))}
+        </Card>
+      </div>
+      <br />
+      <Card
+        style={{
+          display: classInfo?.description == undefined ? "none" : undefined,
+        }}
+      >
+        <Card.Header as="h6">About this class</Card.Header>
+        <Card.Body>
+          <Card.Text>
+            {classInfo.description?.substring(0, 150) + "..."}
+          </Card.Text>
+          {/* <Button variant="primary">Go somewhere</Button> */}
+        </Card.Body>
+      </Card>
+
+      <br />
+
+      <div style={{ display: user?._id == undefined ? "initial" : "none" }}>
+        <Card>
+          <Card.Header as="h6">Class Whisper</Card.Header>
+          <Card.Body>
+            <Card.Text>
+              ClassWhisper is a multifaceted application designed/devloped by
+              <a href=""> Maidul Islam </a> (Cornell '21) to provide an avenue
+              for anonymized class-related communication. It allows students to
+              freely discuss their thoughts organized fashion.
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   );
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
