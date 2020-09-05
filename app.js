@@ -16,27 +16,27 @@ require("dotenv").config();
 var app = express();
 
 // Handle the responses
-if (process.env.NODE_ENV !== "production") {
-  const openAPIFilePath = "./documentation/api.json";
+// if (process.env.NODE_ENV !== "production") {
+//   const openAPIFilePath = "./documentation/api.json";
 
-  mkdirp.sync(path.parse(openAPIFilePath).dir);
+//   mkdirp.sync(path.parse(openAPIFilePath).dir);
 
-  let predefinedSpec;
+//   let predefinedSpec;
 
-  try {
-    predefinedSpec = JSON.parse(
-      fs.readFileSync(openAPIFilePath, { encoding: "utf-8" })
-    );
-  } catch (e) {
-    console.log(e);
-  }
+//   try {
+//     predefinedSpec = JSON.parse(
+//       fs.readFileSync(openAPIFilePath, { encoding: "utf-8" })
+//     );
+//   } catch (e) {
+//     console.log(e);
+//   }
 
-  expressOasGenerator.handleResponses(app, {
-    specOutputPath: openAPIFilePath,
-    writeIntervalMs: 0,
-    predefinedSpec: predefinedSpec ? () => predefinedSpec : undefined,
-  });
-}
+//   expressOasGenerator.handleResponses(app, {
+//     specOutputPath: openAPIFilePath,
+//     writeIntervalMs: 0,
+//     predefinedSpec: predefinedSpec ? () => predefinedSpec : undefined,
+//   });
+// }
 
 // Configuring the database and opening a global connection
 require("./config/database");
@@ -118,6 +118,7 @@ console.log("done");
  * Serve react app
  */
 if (process.env.NODE_ENV === "production") {
+  console.log("prod");
   app.use(express.static("client/build"));
 }
 
