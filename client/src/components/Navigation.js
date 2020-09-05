@@ -50,7 +50,7 @@ function Navigation(props) {
               }
               name="language"
               search={true}
-              placeholder="Search for classes"
+              placeholder="Search for classes, select with up and down arrows and choose with enter key"
             />
           </div>
           <div className="col-sm-3">

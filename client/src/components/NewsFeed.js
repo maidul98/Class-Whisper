@@ -24,13 +24,13 @@ function NewsFeed() {
   const [classInfo, setClassInfo] = useState({});
   const [enrollmentStatus, setEnrollmentStatus] = useState(false);
 
+  const [filter, setFilter] = useState({ by: "hot" });
+
   useEffect(() => {
-    // create class if it hasn't been created
     if (term != null && classNum != null && subject != null) {
       setClassFeed(true);
-      console.log("this is a class");
     }
-    //get class info
+
     if (isClassFeed) {
       fetch(
         `${process.env.REACT_APP_BACKEND_URL}/classes/info?term=${term}&classNum=${classNum}&subject=${subject}`,
@@ -59,18 +59,33 @@ function NewsFeed() {
         .catch((error) => console.log(error));
     }
 
-    //get posts for newsfeed
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`)
-      .then((res) => res.json())
-      .then((postData) => setPosts(postData));
-
-    // get all classes
+    // get all users classes
     fetch(`${process.env.REACT_APP_BACKEND_URL}/classes/myclasses`, {
       headers: authHeader,
     })
       .then((res) => res.json())
       .then((data) => setClasses(data));
   }, [isClassFeed, term, subject, classNum, enrollmentStatus]);
+
+  /**
+   * Get posts for newsfeed
+   */
+  useEffect(() => {
+    let by = "";
+    let query = "";
+
+    if (filter.by == "hot") {
+      by = "/trending-posts";
+    }
+
+    if (isClassFeed && classInfo._id != undefined) {
+      query = `?classId=${classInfo._id}`;
+    }
+
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
+      .then((res) => res.json())
+      .then((postData) => setPosts(postData));
+  }, [isClassFeed, term, subject, classNum, classInfo, filter]);
 
   function joinOrLeave(type) {
     fetch(
@@ -129,11 +144,19 @@ function NewsFeed() {
               classes={classes}
               enrollmentStatus={enrollmentStatus}
             />
-            <Button variant="secondary" className="newsfeedBtnFilter">
+            <Button
+              variant={filter.by == "hot" ? "dark" : "secondary"}
+              className="newsfeedBtnFilter"
+              onClick={() => setFilter({ by: "hot" })}
+            >
               {" "}
               <i className="fas fa-fire"></i> Trending
             </Button>
-            <Button variant="secondary" className="newsfeedBtnFilter">
+            <Button
+              variant={filter.by == "new" ? "dark" : "secondary"}
+              className="newsfeedBtnFilter"
+              onClick={() => setFilter({ by: "new" })}
+            >
               {" "}
               <i className="fas fa-rss"></i> New
             </Button>

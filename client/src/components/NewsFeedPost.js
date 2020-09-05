@@ -3,21 +3,34 @@ import "font-awesome/css/font-awesome.min.css";
 import { LinkContainer } from "react-router-bootstrap";
 
 function NewsFeedPost({ post }) {
+  const [vote, setVote] = useState(post.votes);
+
+  useEffect(() => {}, [vote]);
+
   return (
     <div>
+      {console.log(post)}
       <div className="post">
         <div className="row">
           <div className="col-sm-1">
             <div className="postVotes">
-              <i className="fas fa-arrow-up voteIcon"></i>
-              <p className="postVotes">100</p>
-              <i className="fas fa-arrow-down voteIcon"></i>
+              <i
+                className="fas fa-arrow-up voteIcon"
+                onClick={() => setVote((past) => (past += 1))}
+              ></i>
+              <p className="postVotes">{vote}</p>
+              <i
+                className="fas fa-arrow-down voteIcon"
+                onClick={() => setVote((past) => (past -= 1))}
+              ></i>
             </div>
           </div>
           <div className="col-sm-11">
             <div className="postedDetails">
-              <span className="postedIn">class/CS 5150</span>{" "}
-              <span>posted by mi252</span>
+              <span className="postedIn">
+                class/{post?.class_id?.subject} {post?.class_id?.catalogNbr}
+              </span>{" "}
+              <span>posted by {post?.user?.username}</span>
             </div>
             <LinkContainer to="/post">
               <div className="postTitle">

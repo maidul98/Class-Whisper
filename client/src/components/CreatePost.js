@@ -51,7 +51,6 @@ function CreateNewPost({ classes, enrollmentStatus }) {
       }}
     >
       <Form onSubmit={handleSubmit} className="createPost">
-        {console.log(enrollmentStatus)}
         <div className="row">
           <div className="col-sm-9">
             <Form.Group controlId="title">
