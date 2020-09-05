@@ -55,9 +55,13 @@ function Sidebar({ history, classes, classInfo }) {
           <Card.Body>
             <Card.Text>
               ClassWhisper is a multifaceted application designed/devloped by
-              <a href=""> Maidul Islam </a> (Cornell '21) to provide an avenue
-              for anonymized class-related communication. It allows students to
-              freely discuss their thoughts organized fashion.
+              <a href="https://www.linkedin.com/in/maidul98/">
+                {" "}
+                Maidul Islam{" "}
+              </a>{" "}
+              (Cornell '21) to provide an avenue for anonymized class-related
+              communication. It allows students to freely share and discuss
+              their thoughts in an organized fashion.
             </Card.Text>
           </Card.Body>
         </Card>
