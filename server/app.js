@@ -115,6 +115,14 @@ Class.countDocuments(async function (err, count) {
 console.log("done");
 
 /**
+ * Serve react app
+ */
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
+/**
  * -------------- SERVER ----------------
  */
-app.listen(3000);
+
+app.listen(process.env.PORT || 3000);

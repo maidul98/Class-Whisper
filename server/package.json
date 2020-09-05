@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon  --ignore 'documentation/*' app.js"
+    "dev": "nodemon  --ignore 'documentation/*' app.js",
+    "start": "node app.js",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "gen-keys": "node generateKeypair.js",
+    "heroku-postbuild": "npm run install-client && npm run build && npm run gen-keys"
   },
   "keywords": [],
   "author": "",
