@@ -119,6 +119,9 @@ Class.countDocuments(async function (err, count) {
   if (process.env.NODE_ENV === "production") {
     console.log("prod");
     app.use(express.static("client/build"));
+    app.get("/*", function (req, res) {
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    });
   }
 
   /**
