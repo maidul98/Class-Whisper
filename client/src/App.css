@@ -46,7 +46,34 @@
   cursor: pointer;
 }
 
+/*=======Comments ==========*/
+.ui.comments .comment .reply.form {
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.ui.comments .reply.form textarea {
+  font-size: 1em;
+  height: 5em !important;
+}
+
+.ui.comments .comment {
+  margin-top: 1em !important;
+}
+
+.ui.comments {
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+
+/*=======SINGLE POST PAGE========*/
+.postBody {
+  margin-top: 10px;
+}
+
 /*=======NEWS FEED LAYOUT========*/
+
 .newsFeedContainer {
   max-width: 980px;
   margin: 0 auto;

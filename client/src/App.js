@@ -31,7 +31,7 @@ function App() {
 
         <Route exact path="/register" component={Register} />
 
-        <Route exact path="/post" component={SinglePost} />
+        <Route exact path="/post/:postId" component={SinglePost} />
         <Route exact path="/notifications" component={Notifications} />
         <Route
           exact

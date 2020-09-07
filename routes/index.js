@@ -8,4 +8,6 @@ router.use("/classes", require("./classes"));
 
 router.use("/search", require("./search"));
 
+router.use("/comments", require("./comments"));
+
 module.exports = router;

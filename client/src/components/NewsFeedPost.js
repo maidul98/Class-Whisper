@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import { LinkContainer } from "react-router-bootstrap";
 
-function NewsFeedPost({ post }) {
-  const [vote, setVote] = useState(post.votes);
+function NewsFeedPost({ post, body }) {
+  const [vote, setVote] = useState(100);
 
-  useEffect(() => {}, [vote]);
+  useEffect(() => {
+    setVote(post?.votes);
+  }, [post]);
 
   return (
     <div>
-      {console.log(post)}
       <div className="post">
         <div className="row">
           <div className="col-sm-1">
@@ -32,15 +33,21 @@ function NewsFeedPost({ post }) {
               </span>{" "}
               <span>posted by {post?.user?.username}</span>
             </div>
-            <LinkContainer to="/post">
+            <LinkContainer to={`post/${post?._id}`}>
               <div className="postTitle">
-                <h5>{post.title}</h5>
+                <h5>{post?.title}</h5>
               </div>
             </LinkContainer>
+            <div
+              className="postBody"
+              style={{ display: body ? "inherit" : "none" }}
+            >
+              <p>{post?.body}</p>
+            </div>
             <div className="postStats">
               <span className="commentsCount">
                 <i className="fas fa-comment-alt postCommentsIcon"></i>{" "}
-                {post.comments.length} comments
+                {post?.comments?.length} comments
               </span>
             </div>
           </div>
