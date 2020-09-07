@@ -47,7 +47,7 @@ function NewsFeedPost({ post, body }) {
             <div className="postStats">
               <span className="commentsCount">
                 <i className="fas fa-comment-alt postCommentsIcon"></i>{" "}
-                {post?.comments?.length} comments
+                {post?.comments_count} comment(s)
               </span>
             </div>
           </div>

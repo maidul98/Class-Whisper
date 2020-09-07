@@ -1,13 +1,14 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import "font-awesome/css/font-awesome.min.css";
-// import { Button, Comment, Form, Header } from "semantic-ui-react";
-import { useState } from "react";
+import { UserContext } from "../UserContext";
+import { useState, useContext } from "react";
 
 function Comment({ comment }) {
   const [replyFrom, setReplyFrom] = useState(false);
   const [reply, setReply] = useState("");
   const [replies, setReplies] = useState([]);
+  const { user, setUser } = useContext(UserContext);
 
   function submitReply() {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/comments/reply`, {
@@ -52,7 +53,11 @@ function Comment({ comment }) {
         </div>
         <div className="text">{comment?.body}</div>
         <div className="actions">
-          <a className="reply" onClick={() => setReplyFrom(true)}>
+          <a
+            className="reply"
+            onClick={() => setReplyFrom(true)}
+            style={{ display: user?._id == undefined ? "none" : null }}
+          >
             Reply
           </a>
           <a className="reply" onClick={pullReplies}>
@@ -60,7 +65,7 @@ function Comment({ comment }) {
           </a>
           <form
             className="ui reply form"
-            style={{ display: replyFrom ? "inherit" : "none" }}
+            style={{ display: replyFrom ? null : "none" }}
           >
             <div className="field">
               <textarea

@@ -23,6 +23,12 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
         })
           .then(async (newComment) => {
             newComment = await newComment.populate("user").execPopulate();
+            // update total comments for this post
+            await Post.updateOne(
+              { _id: req.body.post_id },
+              { $inc: { comments_count: 1 } }
+            );
+
             res.send(newComment);
           })
           .catch((error) =>
@@ -71,19 +77,19 @@ router.post(
           })
             .then(async (newReply) => {
               newReply = await newReply.populate("user").execPopulate();
+              // update total comments for this post
+              await Post.updateOne(
+                { _id: req.body.post_id },
+                { $inc: { comments_count: 1 } }
+              );
               //update the replies counter for the parent comment
               Comment.updateOne(
                 { _id: req.body.comment_parent_id },
                 { $inc: { repliesCount: 1 } }
-              )
-                .then(() => {
-                  console.log(newReply);
-                  res.send(newReply);
-                })
-                .then(() => {
-                  console.log("error1");
-                  res.status(500);
-                });
+              ).then(() => {
+                console.log(newReply);
+                res.send(newReply);
+              });
             })
             .catch((error) => {
               console.log("error2");
