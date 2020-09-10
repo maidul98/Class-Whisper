@@ -3,7 +3,9 @@ const router = require("express").Router();
 const axios = require("axios");
 const passport = require("passport");
 const Comment = mongoose.model("Comment");
+const Notifications = mongoose.model("Notifications");
 const Post = mongoose.model("Post");
+
 /**
  * Create a comment for a post
  */
@@ -14,8 +16,8 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
 ) {
   console.log(req.body.body);
   Post.findById(req.body.post_id)
-    .then((result) => {
-      if (result) {
+    .then((post) => {
+      if (post) {
         Comment.create({
           post: req.body.post_id,
           user: req.user._id,
@@ -23,22 +25,33 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
         })
           .then(async (newComment) => {
             newComment = await newComment.populate("user").execPopulate();
+
             // update total comments for this post
             await Post.updateOne(
               { _id: req.body.post_id },
               { $inc: { comments_count: 1 } }
             );
 
+            // create notif
+            if (String(post.user) != String(req.user._id)) {
+              await Notifications.create({
+                sender: req.user._id,
+                receiver: post.user,
+                action: "commented",
+                body: req.body.body,
+                preposition: "on",
+                post: post._id,
+              });
+            }
+
             res.send(newComment);
           })
-          .catch((error) =>
-            res.status(500).send({ msg: "error creating new comment" })
-          );
+          .catch((error) => console.log(error));
       } else {
         throw Error("Not a valid post");
       }
     })
-    .catch((error) => res.status(500).send({ msg: "error finding post" }));
+    .catch((error) => console.log(error));
 });
 
 /**
@@ -67,8 +80,8 @@ router.post(
   function (req, res, next) {
     console.log(req.body);
     Post.findById(req.body.post_id)
-      .then((result) => {
-        if (result) {
+      .then((post) => {
+        if (post) {
           Comment.create({
             post: req.body.post_id,
             user: req.user._id,
@@ -86,8 +99,19 @@ router.post(
               Comment.updateOne(
                 { _id: req.body.comment_parent_id },
                 { $inc: { repliesCount: 1 } }
-              ).then(() => {
-                console.log(newReply);
+              ).then(async () => {
+                // create notif
+                if (String(post.user) != String(req.user._id)) {
+                  await Notifications.create({
+                    sender: req.user._id,
+                    receiver: post.user,
+                    action: "replied",
+                    body: req.body.body,
+                    preposition: "to your comment in",
+                    post: post._id,
+                  });
+                }
+
                 res.send(newReply);
               });
             })

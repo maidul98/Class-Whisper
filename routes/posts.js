@@ -3,6 +3,7 @@ const router = require("express").Router();
 const axios = require("axios");
 const Post = mongoose.model("Post");
 const Class = mongoose.model("Class");
+const Votes = mongoose.model("Vote");
 const passport = require("passport");
 const utils = require("../lib/utils");
 
@@ -31,6 +32,7 @@ router.get("/", function (req, res, next) {
 
   Post.find(query)
     .populate("class_id")
+    .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
     .sort({ createdAt: -1 })
     .then((data) => res.send(data))
@@ -48,9 +50,9 @@ router.get("/trending-posts", function (req, res, next) {
     query = { class_id: req.query.classId };
   }
 
-  console.log(query);
   Post.find(query)
     .populate("class_id")
+    .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
     .then((posts) => {
       res.send(
@@ -88,8 +90,20 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
           class_id: req.body.class,
           user: req.user._id,
         })
-          .then((data) => {
-            res.send(data);
+          .then((post) => {
+            Votes.create({
+              post: post._id,
+            }).then((newVotes) => {
+              Post.findByIdAndUpdate(
+                {
+                  _id: post._id,
+                },
+                { votes: newVotes._id },
+                { new: true }
+              ).then((updatedPost, obj) => {
+                res.send(updatedPost);
+              });
+            });
           })
           .catch((error) => {
             res.status(500);

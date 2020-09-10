@@ -46,6 +46,14 @@
   cursor: pointer;
 }
 
+.activeDown {
+  color: red;
+}
+
+.activeUp {
+  color: green;
+}
+
 /*=======Comments ==========*/
 .ui.comments .comment .reply.form {
   width: 100%;
@@ -127,6 +135,10 @@
   bottom: -50px;
   right: 0;
   width: 100%;
+}
+
+.cursor {
+  cursor: pointer;
 }
 
 /*========NEWS FEED FILTER======*/

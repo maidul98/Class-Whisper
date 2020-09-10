@@ -43,7 +43,6 @@ function Sidebar({ history, classes, classInfo }) {
           <Card.Text>
             {classInfo.description?.substring(0, 150) + "..."}
           </Card.Text>
-          {/* <Button variant="primary">Go somewhere</Button> */}
         </Card.Body>
       </Card>
 

@@ -1,16 +1,23 @@
 import React, { Component, useState, useContext } from "react";
 import { UserContext } from "../UserContext";
+import Alert from "react-bootstrap/Alert";
 
 function Register(props) {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState(null);
   const { user, setUser } = useContext(UserContext);
+  const [errors, setErrors] = useState([]);
 
   function handleSubmit(event) {
     event.preventDefault();
     fetch("/users/register", {
       method: "POST",
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        email: email,
+      }),
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -18,10 +25,12 @@ function Register(props) {
     })
       .then((res) => res.json())
       .then((userObj) => {
-        if (Object.keys(userObj).length != 0) {
+        if (userObj.user) {
           setUser(userObj.user);
           localStorage.setItem("token", userObj.token);
           props.history.push("/");
+        } else {
+          setErrors(userObj.errors);
         }
       })
       .catch(console.log);
@@ -31,7 +40,20 @@ function Register(props) {
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form onSubmit={handleSubmit}>
+          {errors.map((error) => (
+            <Alert variant="warning">{error}</Alert>
+          ))}
           <h3>Sign Up</h3>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="text"
+              onChange={(event) => setEmail(event.target.value)}
+              className="form-control"
+              placeholder="netid@cornell.edu"
+            />
+          </div>
 
           <div className="form-group">
             <label>Username</label>

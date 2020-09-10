@@ -47,6 +47,8 @@ require("./models/Post");
 require("./models/Class");
 require("./models/ClassEnrollment");
 require("./models/Comment");
+require("./models/Notifications");
+require("./models/Vote");
 
 // Passing the global passport object into the configuration function
 require("./config/passport")(passport);

@@ -16,8 +16,8 @@ const PostSchema = new mongoose.Schema({
   },
   body: String,
   votes: {
-    type: Number,
-    default: 0,
+    type: mongoose.Types.ObjectId,
+    ref: "Vote",
   },
   user: {
     type: mongoose.Types.ObjectId,

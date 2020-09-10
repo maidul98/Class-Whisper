@@ -16,18 +16,15 @@ function Login(props) {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => {
-        if ((res.status == 200) | (res.status == 302)) {
-          return res.json();
-        } else {
-          return;
-        }
-      })
+      .then((res) => res.json())
       .then((userObj) => {
-        if (Object.keys(userObj).length != 0) {
+        if (userObj.user) {
+          console.log(userObj, "loggedin");
           setUser(userObj.user);
           localStorage.setItem("token", userObj.token);
           props.history.push("/");
+        } else {
+          console.log(userObj);
         }
       })
       .catch(console.log);

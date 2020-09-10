@@ -21,6 +21,15 @@ function App() {
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
+  useEffect(() => {
+    Auth.getUser().then((user) => {
+      console.log(user._id);
+      if (user?._id != undefined) {
+        setUser(user);
+      }
+    });
+  }, []);
+
   return (
     <Router>
       <UserContext.Provider value={value}>

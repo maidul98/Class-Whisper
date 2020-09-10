@@ -14,14 +14,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
         Authorization: localStorage.getItem("token"),
       },
     })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 401) {
-          setAuthState(false);
-        } else {
-          return response.json();
-        }
-      })
+      .then((res) => res.json())
       .then((user) => {
         setUser(user);
       });
@@ -31,7 +24,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        if (authState) {
+        if (user._id != undefined) {
           return <Component {...props} />;
         } else {
           return (

@@ -17,6 +17,7 @@ function NewsFeed() {
   };
   const [posts, setPosts] = useState([]);
   const { user, setUser } = useContext(UserContext);
+
   const [classes, setClasses] = useState([]);
 
   const { term, subject, classNum } = useParams(); // user is viewing a specific class
@@ -173,7 +174,13 @@ function NewsFeed() {
                 <p>Be brave and break the ice 😳</p>
               </Message>
             ) : (
-              posts.map((post) => <NewsFeedPost post={post} />)
+              posts.map((post) => {
+                // console.log(post);
+                // if (post?._id != undefined) {
+                //   console.log(post);
+                return <NewsFeedPost post={post} />;
+                // }
+              })
             )}
           </div>
           <div className="col-sm-3">

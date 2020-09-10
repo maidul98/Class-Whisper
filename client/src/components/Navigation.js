@@ -10,6 +10,7 @@ import { Button, Placeholder } from "semantic-ui-react";
 function Navigation(props) {
   const debounce = require("es6-promise-debounce");
   const { user, setUser } = useContext(UserContext);
+  const [notifCount, setNotifCount] = useState(0);
 
   function getOptions(query) {
     return new Promise((resolve, reject) => {
@@ -28,6 +29,20 @@ function Navigation(props) {
     });
   }
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/notifications/count`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNotifCount(data.count);
+      });
+  }, []);
+
   return (
     <div className="navigation">
       <div className="container">
@@ -37,7 +52,7 @@ function Navigation(props) {
               <p id="logo-text">Class Whisper</p>
             </LinkContainer>
           </div>
-          <div className="col-sm-7">
+          <div className="col-sm-6">
             <SelectSearch
               options={[]}
               getOptions={debounce(getOptions, 500)}
@@ -53,7 +68,7 @@ function Navigation(props) {
               placeholder="Search for classes, select with up and down arrows and choose with enter key"
             />
           </div>
-          <div className="col-sm-3">
+          <div className="col-sm-4">
             {user?._id == undefined ? (
               <div>
                 <LinkContainer to="/login">
@@ -75,7 +90,10 @@ function Navigation(props) {
                   }}
                 >
                   <i className="fas fa-bell"></i>
-                  <span className="notification_badge">10</span>
+
+                  {notifCount != 0 ? (
+                    <span className="notification_badge">{notifCount}</span>
+                  ) : null}
                 </Button>
                 <Button
                   className="authBtns logout"
@@ -84,7 +102,7 @@ function Navigation(props) {
                     localStorage.removeItem("token");
                   }}
                 >
-                  Logout
+                  Logout of {user.username.substring(0, 10) + "..."}
                 </Button>
               </div>
             )}
