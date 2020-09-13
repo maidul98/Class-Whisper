@@ -44,6 +44,15 @@ router.get("/", function (req, res, next) {
 // Formula is the same as the Reddit "Hot" algorithm, found here:
 // https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111e33d0d9
  */
+
+function hot(score, date) {
+  var order = Math.log(Math.max(Math.abs(score), 1)) / Math.LN10;
+  var sign = score > 0 ? 1 : score < 0 ? -1 : 0;
+  var seconds = date.getTime() / 1000 - 1134028003;
+  var product = order + (sign * seconds) / 45000;
+  return Math.round(product * 10000000) / 10000000;
+}
+
 router.get("/trending-posts", function (req, res, next) {
   let query = {};
   if (req.query.classId != undefined) {
@@ -57,17 +66,13 @@ router.get("/trending-posts", function (req, res, next) {
     .then((posts) => {
       res.send(
         posts.sort(function (a, b) {
-          var seconds = Date.parse(a.createdAt) / 1000 - 1134028003;
-          var order = Math.log10(Math.max(Math.abs(a.votes), 1));
-          var sign = a.votes > 0 ? 1 : a.votes < 0 ? -1 : 0;
-          var aScore = Math.round(sign * order + seconds / 45000, 7);
-          seconds = Date.parse(b.createdAt) / 1000 - 1134028003;
-          order = Math.log10(Math.max(Math.abs(b.votes), 1));
-          sign = b.votes > 0 ? 1 : b.votes < 0 ? -1 : 0;
-          var bScore = Math.round(sign * order + seconds / 45000, 7);
+          const scoreA = hot(a.votes.voteCounts, a.createdAt);
+          const scoreB = hot(b.votes.voteCounts, b.createdAt);
+          console.log(scoreA, scoreB);
+
           var comp = 0;
-          if (aScore > bScore) comp = -1;
-          else if (aScore < bScore) comp = 1;
+          if (scoreA > scoreB) comp = -1;
+          else if (scoreA < scoreB) comp = 1;
           return comp;
         })
       );

@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
-import Navbar from "react-bootstrap/Navbar";
-import Toast from "react-bootstrap/Toast";
 import { LinkContainer } from "react-router-bootstrap";
 import { UserContext } from "../UserContext";
-import SelectSearch from "react-select-search";
+import AsyncSelect from "react-select/async";
 import { Button, Placeholder } from "semantic-ui-react";
+var debounce = require("es6-promise-debounce");
 
 function Navigation(props) {
-  const debounce = require("es6-promise-debounce");
   const { user, setUser } = useContext(UserContext);
   const [notifCount, setNotifCount] = useState(0);
 
@@ -21,7 +19,7 @@ function Navigation(props) {
           resolve(
             data.map(({ subject, term, catalogNbr, completeTitle }) => ({
               value: { subject: subject, catalogNbr: catalogNbr, term: term },
-              name: completeTitle,
+              label: completeTitle,
             }))
           );
         })
@@ -53,19 +51,18 @@ function Navigation(props) {
             </LinkContainer>
           </div>
           <div className="col-sm-6">
-            <SelectSearch
-              options={[]}
-              getOptions={debounce(getOptions, 500)}
-              onChange={(value) =>
+            <AsyncSelect
+              cacheOptions
+              defaultOptions
+              loadOptions={debounce(getOptions, 500)}
+              placeholder="Search for classes"
+              onChange={({ value }) => {
                 props.history.push(
                   `/class/${value.term.toLowerCase()}/${value.subject.toLowerCase()}/${
                     value.catalogNbr
                   }`
-                )
-              }
-              name="language"
-              search={true}
-              placeholder="Search for classes, select with up and down arrows and choose with enter key"
+                );
+              }}
             />
           </div>
           <div className="col-sm-4">

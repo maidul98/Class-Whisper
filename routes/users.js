@@ -47,20 +47,13 @@ router.get(
 
 router.post("/login", function (req, res, next) {
   User.findOne({ username: req.body.username })
-    .then(async (user) => {
+    .then((user) => {
       if (!user) {
         return res
           .status(401)
           .json({ success: false, msg: "You are not registered" });
       }
-      if (!user.verified) {
-        await mailVerificacion();
-        return res.status(401).json({
-          success: false,
-          msg:
-            "You haven't confirmed your accout yet. Not to worry, we have sent you another verification link to your Cornell email",
-        });
-      }
+
       const isValid = utils.validPassword(
         req.body.password,
         user.hash,

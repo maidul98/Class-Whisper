@@ -16,50 +16,48 @@ router.post(
     let requestBody = req.body;
     let postToFind = requestBody["postId"];
 
-    console.log(req.body);
-
     if (requestBody["voteType"] == "") {
-      let changed = false;
-      let voteChange = 0;
-
-      const isInDownVote = await postVotesCollection.updateOne(
+      await postVotesCollection.updateOne(
         { post: postToFind },
         {
           $pull: {
             downvoters: req.user._id,
           },
+        },
+        async (error, result) => {
+          if (result.nModified > 0) {
+            await postVotesCollection.updateOne(
+              { post: postToFind },
+              {
+                $inc: {
+                  voteCounts: 1,
+                },
+              }
+            );
+          } else {
+            await postVotesCollection.updateOne(
+              { post: postToFind },
+              {
+                $pull: {
+                  upvoters: req.user._id,
+                },
+              },
+              async (error, result) => {
+                if (result.nModified > 0) {
+                  await postVotesCollection.updateOne(
+                    { post: postToFind },
+                    {
+                      $inc: {
+                        voteCounts: -1,
+                      },
+                    }
+                  );
+                }
+              }
+            );
+          }
         }
       );
-
-      if (isInDownVote.nModified > 0) {
-        changed = true;
-        voteChange = 1;
-      } else {
-        const isInUpVote = await postVotesCollection.updateOne(
-          { post: postToFind },
-          {
-            $pull: {
-              upvoters: req.user._id,
-            },
-          }
-        );
-
-        if (isInUpVote.nModified > 0) {
-          changed = true;
-          voteChange = -1;
-        }
-      }
-
-      if (changed == true) {
-        await postVotesCollection.updateOne(
-          { post: postToFind },
-          {
-            $inc: {
-              voteCounts: voteChange,
-            },
-          }
-        );
-      }
     }
     //If the user is already in the downvoters list, then we remove from it and add to the upvoters
     //That's why for negating the downvote -(-1) and another upvote (+1) - Totally 2 is added to the count

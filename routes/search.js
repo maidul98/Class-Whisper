@@ -15,7 +15,7 @@ router.get("/class", async function (req, res, next) {
   const query = req.query.query;
 
   const results = await Class.find({
-    completeTitle: { $regex: `.*${query}.*`, $options: "i" },
+    completeTitle: { $regex: `${query}`, $options: "i" },
   }).limit(50);
 
   res.send(results);

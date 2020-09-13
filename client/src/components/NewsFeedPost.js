@@ -5,30 +5,38 @@ import Moment from "react-moment";
 import { UserContext } from "../UserContext";
 
 function NewsFeedPost({ post, body }) {
-  const [vote, setVote] = useState(post.votes.voteCounts);
+  const [vote, setVote] = useState(post?.votes?.voteCounts);
   const [currentVote, updateCurrentVote] = useState("");
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     const votes = post.votes;
     console.log(user._id, "user from votes");
-    if (votes.downvoters.includes(user._id)) {
+    if (votes?.downvoters?.includes(user._id)) {
       updateCurrentVote("down");
       console.log("set down");
     }
 
-    if (votes.upvoters.includes(user._id)) {
+    if (votes?.upvoters.includes(user._id)) {
       updateCurrentVote("up");
       console.log("set up");
     }
   }, [user]);
 
   function handleUp() {
+    if (user._id == undefined) {
+      return alert("Vote not casted, login to do so!");
+    }
+
     if (currentVote == "up") {
       updateCurrentVote("");
       updateVoteServer("");
       setVote((prev) => (prev -= 1));
-    } else if (currentVote == "down" || currentVote == "") {
+    } else if (currentVote == "down") {
+      updateCurrentVote("up");
+      updateVoteServer("up");
+      setVote((prev) => (prev += 2));
+    } else {
       updateCurrentVote("up");
       updateVoteServer("up");
       setVote((prev) => (prev += 1));
@@ -36,11 +44,19 @@ function NewsFeedPost({ post, body }) {
   }
 
   function handleDown() {
+    if (user._id == undefined) {
+      return alert("Vote not casted, login to do so!");
+    }
+
     if (currentVote == "down") {
       updateCurrentVote("");
       setVote((prev) => (prev += 1));
       updateVoteServer("");
-    } else if (currentVote == "up" || currentVote == "") {
+    } else if (currentVote == "up") {
+      updateCurrentVote("down");
+      updateVoteServer("down");
+      setVote((prev) => (prev -= 2));
+    } else {
       updateCurrentVote("down");
       updateVoteServer("down");
       setVote((prev) => (prev -= 1));
