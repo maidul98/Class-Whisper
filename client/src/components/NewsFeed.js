@@ -11,13 +11,13 @@ import { Header, Message } from "semantic-ui-react";
 import { set } from "mongoose";
 
 function NewsFeed() {
+  const { user, setUser } = useContext(UserContext);
   const authHeader = {
     Accept: "application/json",
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token"),
   };
   const [posts, setPosts] = useState([]);
-  const { user, setUser } = useContext(UserContext);
 
   const [classes, setClasses] = useState([]);
 
@@ -29,6 +29,13 @@ function NewsFeed() {
   const [filter, setFilter] = useState({ by: "hot" });
 
   useEffect(() => {
+    let by = "";
+    let query = "";
+
+    if (filter.by == "hot") {
+      by = "/trending-posts";
+    }
+
     if (term != null && classNum != null && subject != null) {
       setClassFeed(true);
     }
@@ -57,51 +64,37 @@ function NewsFeed() {
             .catch((error) => console.log(error));
 
           setClassInfo(data);
+
+          // change query
+          if (isClassFeed) {
+            query = `?classId=${data._id}`;
+            console.log("this is a class");
+          }
+
+          //pull newsfeed post
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
+            .then((res) => res.json())
+            .then((postData) => setPosts(postData))
+            .catch((error) => console.log(error));
         })
+        .catch((error) => console.log(error));
+    } else {
+      console.log("not a class feed");
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
+        .then((res) => res.json())
+        .then((postData) => setPosts(postData))
         .catch((error) => console.log(error));
     }
 
     // get all users classes
+    // if (user._id != undefined) {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/classes/myclasses`, {
       headers: authHeader,
     })
       .then((res) => res.json())
       .then((data) => setClasses(data));
-
-    // clean up
-    return () => {
-      setClasses([]);
-      setClassInfo({});
-    };
-  }, [isClassFeed, term, subject, classNum, enrollmentStatus]);
-
-  /**
-   * Get posts for newsfeed
-   */
-  useEffect(() => {
-    let by = "";
-    let query = "";
-
-    if (filter.by == "hot") {
-      by = "/trending-posts";
-    }
-
-    // is this a newsfeed for a class or home page?
-    if (isClassFeed && classInfo._id != undefined) {
-      query = `?classId=${classInfo._id}`;
-    }
-
-    //pull newsfeed post
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
-      .then((res) => res.json())
-      .then((postData) => setPosts(postData))
-      .catch((error) => console.log(error));
-
-    // clean up
-    return () => {
-      setPosts([]);
-    };
-  }, [isClassFeed, term, subject, classNum, classInfo, filter]);
+    // }
+  }, [isClassFeed, term, subject, classNum, enrollmentStatus, filter]);
 
   function joinOrLeave(type) {
     fetch(

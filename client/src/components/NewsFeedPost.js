@@ -9,14 +9,15 @@ function NewsFeedPost({ post, body, history }) {
   const [vote, setVote] = useState(post?.votes?.voteCounts);
   const [currentVote, updateCurrentVote] = useState("");
   const { user, setUser } = useContext(UserContext);
+
   useEffect(() => {
     const votes = post.votes;
     if (votes?.downvoters?.includes(user._id)) {
       updateCurrentVote("down");
-    }
-
-    if (votes?.upvoters?.includes(user._id)) {
+    } else if (votes?.upvoters?.includes(user._id)) {
       updateCurrentVote("up");
+    } else {
+      updateCurrentVote("");
     }
   }, [user, post]);
 
