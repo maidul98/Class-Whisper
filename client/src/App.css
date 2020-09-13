@@ -27,6 +27,7 @@
 .postedIn {
   font-weight: bold;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .postTitle {
@@ -52,6 +53,10 @@
 
 .activeUp {
   color: green;
+}
+
+.read_more {
+  cursor: pointer;
 }
 
 /*=======Comments ==========*/

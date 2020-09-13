@@ -56,9 +56,7 @@ function Notifications(props) {
                 </LinkContainer>
               </div>
               <small>
-                <Moment format={"MMMM Do, YYYY h:mma"}>
-                  {notification.createdAt}
-                </Moment>
+                <Moment fromNow>{notification.createdAt}</Moment>
               </small>
             </Toast.Header>
             <Toast.Body>{notification.body}</Toast.Body>

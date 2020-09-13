@@ -3,12 +3,12 @@ import "font-awesome/css/font-awesome.min.css";
 import { LinkContainer } from "react-router-bootstrap";
 import Moment from "react-moment";
 import { UserContext } from "../UserContext";
+import { withRouter } from "react-router-dom";
 
-function NewsFeedPost({ post, body }) {
+function NewsFeedPost({ post, body, history }) {
   const [vote, setVote] = useState(post?.votes?.voteCounts);
   const [currentVote, updateCurrentVote] = useState("");
   const { user, setUser } = useContext(UserContext);
-
   useEffect(() => {
     const votes = post.votes;
     if (votes?.downvoters?.includes(user._id)) {
@@ -102,12 +102,20 @@ function NewsFeedPost({ post, body }) {
           </div>
           <div className="col-sm-11">
             <div className="postedDetails">
-              <span className="postedIn">
+              <span
+                className="postedIn"
+                onClick={() => {
+                  history.push(
+                    `/class/${post.class_id.term.toLowerCase()}/${post.class_id.subject.toLowerCase()}/${
+                      post.class_id.catalogNbr
+                    }`
+                  );
+                }}
+              >
                 class/{post?.class_id?.subject} {post?.class_id?.catalogNbr}
               </span>{" "}
-              <span>posted by {post?.user?.username}</span>
-              <span> at </span>
-              <Moment format={"h:mma"} className="postDate">
+              <span>posted by {post?.user?.username} </span>
+              <Moment fromNow className="postDate">
                 {post?.createdAt}
               </Moment>
             </div>
@@ -123,9 +131,10 @@ function NewsFeedPost({ post, body }) {
                 <p>
                   {post?.body?.substring(0, 500)}
                   {post?.body?.length > 500 ? (
-                    <b>
-                      {" "}
-                      <i>(read more...)</i>
+                    <b className="read_more">
+                      <LinkContainer to={`/post/${post?._id}`}>
+                        <i> (read more...)</i>
+                      </LinkContainer>
                     </b>
                   ) : null}
                 </p>
@@ -144,4 +153,4 @@ function NewsFeedPost({ post, body }) {
   );
 }
 
-export default NewsFeedPost;
+export default withRouter(NewsFeedPost);

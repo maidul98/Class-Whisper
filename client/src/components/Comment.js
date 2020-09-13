@@ -3,6 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import "font-awesome/css/font-awesome.min.css";
 import { UserContext } from "../UserContext";
 import { useState, useContext } from "react";
+import Moment from "react-moment";
 
 function Comment({ comment }) {
   const [replyFrom, setReplyFrom] = useState(false);
@@ -49,7 +50,9 @@ function Comment({ comment }) {
       <div className="content">
         <a className="author">{comment?.user?.username}</a>
         <div className="metadata">
-          <span className="date">Just now</span>
+          <span className="date">
+            <Moment fromNow>{comment?.createdAt}</Moment>
+          </span>
         </div>
         <div className="text">{comment?.body}</div>
         <div className="actions">
