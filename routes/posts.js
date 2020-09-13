@@ -14,6 +14,8 @@ router.get("/single", function (req, res, next) {
   Post.findById(req.query.postId)
     .populate({ path: "user", select: "-hash -salt" })
     .populate("class_id")
+    .populate("votes")
+    .populate("class_id")
     .then((post) => {
       res.send(post);
     })
@@ -24,7 +26,6 @@ router.get("/single", function (req, res, next) {
  * Get all posts
  */
 router.get("/", function (req, res, next) {
-  console.log("running new");
   let query = {};
   if (req.query.classId != undefined) {
     query = { class_id: req.query.classId };
@@ -98,6 +99,8 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
           .then((post) => {
             Votes.create({
               post: post._id,
+              upvoters: [req.user._id],
+              voteCounts: 1,
             }).then((newVotes) => {
               Post.findByIdAndUpdate(
                 {
@@ -105,12 +108,16 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
                 },
                 { votes: newVotes._id },
                 { new: true }
-              ).then((updatedPost, obj) => {
-                res.send(updatedPost);
-              });
+              )
+                .populate("class_id")
+                .populate("votes")
+                .then((updatedPost, obj) => {
+                  res.send(updatedPost);
+                });
             });
           })
           .catch((error) => {
+            console.log(error);
             res.status(500);
           });
       } else {
@@ -118,19 +125,6 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
       }
     })
     .catch((error) => res.status(500));
-});
-
-/**
- * Add a comment
- */
-router.get("/single", function (req, res, next) {
-  Post.findById(req.query.postId)
-    .populate({ path: "user", select: "-hash -salt" })
-    .populate("class_id")
-    .then((post) => {
-      res.send(post);
-    })
-    .catch((err) => res.send({ msg: "There was an error" }));
 });
 
 module.exports = router;

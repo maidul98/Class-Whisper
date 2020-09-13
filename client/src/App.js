@@ -15,9 +15,7 @@ import Auth from "./components/Auth";
 import Notifications from "./components/Notifications";
 
 function App() {
-  const [user, setUser] = useState({
-    token: null,
-  });
+  const [user, setUser] = useState({});
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 

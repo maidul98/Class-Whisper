@@ -1,5 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css");
-/*=======NEWS FEED POST=========*/
+/*=======NEWS FEED =========*/
 .post {
   margin: 15px 0;
   padding: 5px;
@@ -78,6 +78,7 @@
 /*=======SINGLE POST PAGE========*/
 .postBody {
   margin-top: 10px;
+  white-space: pre-wrap;
 }
 
 /*=======NEWS FEED LAYOUT========*/
@@ -186,6 +187,11 @@
 .submitPost {
   background-color: #2fcc8b !important;
   border-color: #2fcc8b !important;
+}
+
+.fileContainer .chooseFileButton {
+  background-color: gray !important;
+  cursor: default !important;
 }
 
 /*============== Notifications ==========*/

@@ -11,17 +11,18 @@ function NewsFeedPost({ post, body }) {
 
   useEffect(() => {
     const votes = post.votes;
-    console.log(user._id, "user from votes");
     if (votes?.downvoters?.includes(user._id)) {
       updateCurrentVote("down");
-      console.log("set down");
     }
 
-    if (votes?.upvoters.includes(user._id)) {
+    if (votes?.upvoters?.includes(user._id)) {
       updateCurrentVote("up");
-      console.log("set up");
     }
-  }, [user]);
+  }, [user, post]);
+
+  useEffect(() => {
+    setVote(post?.votes?.voteCounts);
+  }, [post]);
 
   function handleUp() {
     if (user._id == undefined) {
@@ -64,7 +65,6 @@ function NewsFeedPost({ post, body }) {
   }
 
   function updateVoteServer(voteType) {
-    console.log(voteType);
     fetch(`${process.env.REACT_APP_BACKEND_URL}/votes`, {
       method: "POST",
       headers: {
@@ -116,11 +116,20 @@ function NewsFeedPost({ post, body }) {
                 <h5>{post?.title}</h5>
               </div>
             </LinkContainer>
-            <div
-              className="postBody"
-              style={{ display: body ? "inherit" : "none" }}
-            >
-              <p>{post?.body}</p>
+            <div className="postBody">
+              {body != undefined ? (
+                <p>{post.body}</p>
+              ) : (
+                <p>
+                  {post?.body?.substring(0, 500)}
+                  {post?.body?.length > 500 ? (
+                    <b>
+                      {" "}
+                      <i>(read more...)</i>
+                    </b>
+                  ) : null}
+                </p>
+              )}
             </div>
             <div className="postStats">
               <span className="commentsCount">

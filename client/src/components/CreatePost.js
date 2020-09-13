@@ -6,12 +6,11 @@ import { UserContext } from "../UserContext";
 import Form from "react-bootstrap/Form";
 import ImageUploader from "react-images-upload";
 
-function CreateNewPost({ classes, enrollmentStatus }) {
+function CreateNewPost({ enrollmentStatus, classInfo, setPosts }) {
   const { user, setUser } = useContext(UserContext);
   const [hide, setHide] = useState(true);
-  const [title, setTitle] = useState(true);
+  const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [classId, setClassId] = useState(classes[0]?._id);
   const authHeader = {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -19,8 +18,17 @@ function CreateNewPost({ classes, enrollmentStatus }) {
   };
 
   useEffect(() => {
-    setClassId(classes[0]?._id);
-  }, [classes]);
+    const uploadbtn = document.getElementsByClassName("chooseFileButton")[0];
+    if (uploadbtn) {
+      uploadbtn.setAttribute("disabled", "true");
+    }
+  }, [hide]);
+
+  function formCleanUp() {
+    setBody("");
+    setTitle("");
+    setHide(true);
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -31,14 +39,14 @@ function CreateNewPost({ classes, enrollmentStatus }) {
         title: title,
         body: body,
         user: user,
-        class: classId,
+        class: classInfo._id,
       }),
       headers: authHeader,
     })
-      .then((res) => {
-        if (res.status == 200) {
-          alert("Your post has been posted! Refresh the page to see it");
-        }
+      .then((res) => res.json())
+      .then((post) => {
+        setPosts((prev) => [post, ...prev]);
+        formCleanUp();
       })
       .catch(console.log);
   }
@@ -52,28 +60,15 @@ function CreateNewPost({ classes, enrollmentStatus }) {
     >
       <Form onSubmit={handleSubmit} className="createPost">
         <div className="row">
-          <div className="col-sm-9">
+          <div className="col-sm-12">
             <Form.Group controlId="title">
               <Form.Control
                 autoComplete="off"
                 onClick={() => setHide(false)}
                 onChange={(event) => setTitle(event.target.value)}
-                placeholder="Make a post"
+                placeholder="Post title"
+                value={title}
               />
-            </Form.Group>
-          </div>
-          <div className="col-sm-3">
-            <Form.Group controlId="class">
-              <Form.Control
-                as="select"
-                onChange={(event) => setClassId(event.target.value)}
-              >
-                {classes.map((singleClass) => (
-                  <option value={singleClass._id}>
-                    {`${singleClass.subject} ${singleClass.catalogNbr}`}
-                  </option>
-                ))}
-              </Form.Control>
             </Form.Group>
           </div>
         </div>
@@ -83,18 +78,20 @@ function CreateNewPost({ classes, enrollmentStatus }) {
               <Form.Control
                 as="textarea"
                 rows="3"
+                placeholder="Have more to say? Put it here"
                 onChange={(event) => setBody(event.target.value)}
+                value={body}
               />
             </Form.Group>
-
             <ImageUploader
+              disabled={true}
               withIcon={true}
-              buttonText="Choose images"
+              buttonText="Upload images feature coming soon..."
               onChange={() => console.log("dropped")}
               imgExtension={[".jpg", ".gif", ".png", ".gif"]}
               maxFileSize={5242880}
             />
-
+            {/* <p>(You can upload your favorite meme soon!)</p> */}
             <button
               type="submit"
               className="btn btn-primary btn-block submitPost"

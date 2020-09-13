@@ -8,6 +8,7 @@ import SideBar from "./Sidebar";
 import { UserContext } from "../UserContext";
 import CreateNewPost from "./CreatePost";
 import { Header, Message } from "semantic-ui-react";
+import { set } from "mongoose";
 
 function NewsFeed() {
   const authHeader = {
@@ -33,6 +34,7 @@ function NewsFeed() {
     }
 
     if (isClassFeed) {
+      // pull class info
       fetch(
         `${process.env.REACT_APP_BACKEND_URL}/classes/info?term=${term}&classNum=${classNum}&subject=${subject}`,
         {
@@ -50,7 +52,6 @@ function NewsFeed() {
           )
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
               setEnrollmentStatus(data.enrollmentStatus);
             })
             .catch((error) => console.log(error));
@@ -66,6 +67,12 @@ function NewsFeed() {
     })
       .then((res) => res.json())
       .then((data) => setClasses(data));
+
+    // clean up
+    return () => {
+      setClasses([]);
+      setClassInfo({});
+    };
   }, [isClassFeed, term, subject, classNum, enrollmentStatus]);
 
   /**
@@ -79,13 +86,21 @@ function NewsFeed() {
       by = "/trending-posts";
     }
 
+    // is this a newsfeed for a class or home page?
     if (isClassFeed && classInfo._id != undefined) {
       query = `?classId=${classInfo._id}`;
     }
 
+    //pull newsfeed post
     fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
       .then((res) => res.json())
-      .then((postData) => setPosts(postData));
+      .then((postData) => setPosts(postData))
+      .catch((error) => console.log(error));
+
+    // clean up
+    return () => {
+      setPosts([]);
+    };
   }, [isClassFeed, term, subject, classNum, classInfo, filter]);
 
   function joinOrLeave(type) {
@@ -105,6 +120,11 @@ function NewsFeed() {
         }
       })
       .catch((error) => console.log(error));
+
+    // clean up
+    return () => {
+      setEnrollmentStatus(false);
+    };
   }
 
   function leaveOrJoinBtn() {
@@ -142,8 +162,10 @@ function NewsFeed() {
             ) : null}
 
             <CreateNewPost
+              classInfo={classInfo}
               classes={classes}
               enrollmentStatus={enrollmentStatus}
+              setPosts={setPosts}
             />
             <Button
               variant={filter.by == "hot" ? "dark" : "secondary"}
@@ -175,11 +197,7 @@ function NewsFeed() {
               </Message>
             ) : (
               posts.map((post) => {
-                // console.log(post);
-                // if (post?._id != undefined) {
-                //   console.log(post);
                 return <NewsFeedPost post={post} />;
-                // }
               })
             )}
           </div>
