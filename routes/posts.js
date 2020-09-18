@@ -60,7 +60,10 @@ router.get("/trending-posts", function (req, res, next) {
     query = { class_id: req.query.classId };
   }
 
-  Post.find(query)
+  const skip =
+    req.query.skip && /^\d+$/.test(req.query.skip) ? Number(req.query.skip) : 0;
+
+  Post.find(query, undefined, { skip, limit: 5 })
     .populate("class_id")
     .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
@@ -69,7 +72,6 @@ router.get("/trending-posts", function (req, res, next) {
         posts.sort(function (a, b) {
           const scoreA = hot(a.votes.voteCounts, a.createdAt);
           const scoreB = hot(b.votes.voteCounts, b.createdAt);
-          console.log(scoreA, scoreB);
 
           var comp = 0;
           if (scoreA > scoreB) comp = -1;
@@ -82,49 +84,64 @@ router.get("/trending-posts", function (req, res, next) {
 });
 
 /** Make a post */
-router.post("/", passport.authenticate("jwt", { session: false }), function (
-  req,
-  res,
-  next
-) {
-  Class.findOne({ _id: req.body.class, enrollments: { $in: [req.user._id] } })
-    .then((data) => {
-      if (data != null) {
-        Post.create({
-          title: req.body.title,
-          body: req.body.body,
-          class_id: req.body.class,
-          user: req.user._id,
-        })
-          .then((post) => {
-            Votes.create({
-              post: post._id,
-              upvoters: [req.user._id],
-              voteCounts: 1,
-            }).then((newVotes) => {
-              Post.findByIdAndUpdate(
-                {
-                  _id: post._id,
-                },
-                { votes: newVotes._id },
-                { new: true }
-              )
-                .populate("class_id")
-                .populate("votes")
-                .then((updatedPost, obj) => {
-                  res.send(updatedPost);
-                });
-            });
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async function (req, res, next) {
+    let reCap = await axios(`https://www.google.com/recaptcha/api/siteverify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `secret=${"6LeiO80ZAAAAAJAzD8cVxV6GiWjSwFpdIHDn_PJA"}&response=${
+        req.body["reCAPTCHA"]
+      }`,
+    });
+
+    if (reCap.data.success == false) {
+      console.log("nope");
+      return res.status(500);
+    }
+
+    Class.findOne({ _id: req.body.class, enrollments: { $in: [req.user._id] } })
+      .then((data) => {
+        if (data != null) {
+          Post.create({
+            title: req.body.title,
+            body: req.body.body,
+            class_id: req.body.class,
+            user: req.user._id,
           })
-          .catch((error) => {
-            console.log(error);
-            res.status(500);
-          });
-      } else {
-        throw Error("Class not found");
-      }
-    })
-    .catch((error) => res.status(500));
-});
+            .then((post) => {
+              Votes.create({
+                post: post._id,
+                upvoters: [req.user._id],
+                voteCounts: 1,
+              }).then((newVotes) => {
+                Post.findByIdAndUpdate(
+                  {
+                    _id: post._id,
+                  },
+                  { votes: newVotes._id },
+                  { new: true }
+                )
+                  .populate("class_id")
+                  .populate("votes")
+                  .then((updatedPost, obj) => {
+                    res.send(updatedPost);
+                  });
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(500);
+            });
+        } else {
+          throw Error("Class not found");
+        }
+      })
+      .catch((error) => res.status(500));
+  }
+);
 
 module.exports = router;

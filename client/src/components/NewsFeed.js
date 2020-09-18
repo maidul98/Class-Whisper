@@ -8,7 +8,6 @@ import SideBar from "./Sidebar";
 import { UserContext } from "../UserContext";
 import CreateNewPost from "./CreatePost";
 import { Header, Message } from "semantic-ui-react";
-import { set } from "mongoose";
 
 function NewsFeed() {
   const { user, setUser } = useContext(UserContext);
@@ -18,6 +17,7 @@ function NewsFeed() {
     Authorization: localStorage.getItem("token"),
   };
   const [posts, setPosts] = useState([]);
+  const [skip, setSkip] = useState(0);
 
   const [classes, setClasses] = useState([]);
 
@@ -29,11 +29,12 @@ function NewsFeed() {
   const [filter, setFilter] = useState({ by: "hot" });
 
   useEffect(() => {
+    console.log("ran");
     let by = "";
     let query = "";
 
     if (filter.by == "hot") {
-      by = "/trending-posts";
+      by = `/trending-posts`;
     }
 
     if (term != null && classNum != null && subject != null) {
@@ -67,7 +68,7 @@ function NewsFeed() {
 
           // change query
           if (isClassFeed) {
-            query = `?classId=${data._id}`;
+            query = `?classId=${data._id}&skip=${skip}`;
             console.log("this is a class");
           }
 
@@ -94,7 +95,7 @@ function NewsFeed() {
       .then((res) => res.json())
       .then((data) => setClasses(data));
     // }
-  }, [isClassFeed, term, subject, classNum, enrollmentStatus, filter]);
+  }, [isClassFeed, term, subject, classNum, enrollmentStatus, filter, skip]);
 
   function joinOrLeave(type) {
     fetch(
@@ -141,6 +142,23 @@ function NewsFeed() {
           Leave class
         </Button>
       );
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  function handleScroll() {
+    const offsetHeight = document.documentElement.offsetHeight;
+    const scrollHeight = window.innerHeight;
+    const scrollTop = document.documentElement.scrollTop;
+
+    if (offsetHeight + scrollTop === scrollHeight) {
+      setSkip(5);
+      console.log("skip set");
     }
   }
 
