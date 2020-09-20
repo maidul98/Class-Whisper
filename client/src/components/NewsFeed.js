@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, usep } from "react";
-import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import "font-awesome/css/font-awesome.min.css";
 
@@ -11,156 +10,49 @@ import { Header, Message } from "semantic-ui-react";
 
 function NewsFeed() {
   const { user, setUser } = useContext(UserContext);
-  const authHeader = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    Authorization: localStorage.getItem("token"),
-  };
   const [posts, setPosts] = useState([]);
   const [skip, setSkip] = useState(0);
-
   const [classes, setClasses] = useState([]);
-
-  const { term, subject, classNum } = useParams(); // user is viewing a specific class
-  const [isClassFeed, setClassFeed] = useState(false);
   const [classInfo, setClassInfo] = useState({});
-  const [enrollmentStatus, setEnrollmentStatus] = useState(false);
-
-  const [filter, setFilter] = useState({ by: "hot" });
+  const [filter, setFilter] = useState({
+    by: "/trending-posts",
+    active: "hot",
+  });
 
   useEffect(() => {
-    console.log("ran");
-    let by = "";
-    let query = "";
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}`)
+      .then((res) => res.json())
+      .then((postData) => setPosts(postData))
+      .catch((error) => console.log(error));
+  }, [filter]);
 
-    if (filter.by == "hot") {
-      by = `/trending-posts`;
-    }
-
-    if (term != null && classNum != null && subject != null) {
-      setClassFeed(true);
-    }
-
-    if (isClassFeed) {
-      // pull class info
+  useEffect(() => {
+    if (skip > 0) {
       fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/classes/info?term=${term}&classNum=${classNum}&subject=${subject}`,
-        {
-          headers: authHeader,
-        }
+        `${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}?skip=${skip}`
       )
         .then((res) => res.json())
-        .then((data) => {
-          // check enrolment status
-          fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/classes/check-enrollment?classId=${data._id}`,
-            {
-              headers: authHeader,
-            }
-          )
-            .then((res) => res.json())
-            .then((data) => {
-              setEnrollmentStatus(data.enrollmentStatus);
-            })
-            .catch((error) => console.log(error));
-
-          setClassInfo(data);
-
-          // change query
-          if (isClassFeed) {
-            query = `?classId=${data._id}&skip=${skip}`;
-            console.log("this is a class");
-          }
-
-          //pull newsfeed post
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
-            .then((res) => res.json())
-            .then((postData) => setPosts(postData))
-            .catch((error) => console.log(error));
-        })
-        .catch((error) => console.log(error));
-    } else {
-      console.log("not a class feed");
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${by}${query}`)
-        .then((res) => res.json())
-        .then((postData) => setPosts(postData))
+        .then((postData) =>
+          setPosts((prev) => {
+            console.log(postData.length);
+            return [...prev, ...postData];
+          })
+        )
         .catch((error) => console.log(error));
     }
+  }, [skip]);
 
-    // get all users classes
-    // if (user._id != undefined) {
+  useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/classes/myclasses`, {
-      headers: authHeader,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
     })
       .then((res) => res.json())
       .then((data) => setClasses(data));
-    // }
-  }, [isClassFeed, term, subject, classNum, enrollmentStatus, filter, skip]);
-
-  function joinOrLeave(type) {
-    fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/classes/${type}?classId=${classInfo._id}`,
-      {
-        method: "post",
-        headers: authHeader,
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (type == "join") {
-          setEnrollmentStatus(true);
-        } else {
-          setEnrollmentStatus(false);
-        }
-      })
-      .catch((error) => console.log(error));
-
-    // clean up
-    return () => {
-      setEnrollmentStatus(false);
-    };
-  }
-
-  function leaveOrJoinBtn() {
-    if (isClassFeed && enrollmentStatus == false) {
-      return (
-        <Button
-          variant="success"
-          className="submitPost newsfeedBtnFilter float-right"
-          onClick={() => joinOrLeave("join")}
-        >
-          Join class
-        </Button>
-      );
-    } else if (isClassFeed && enrollmentStatus == true) {
-      return (
-        <Button
-          variant="outline-secondary"
-          className="newsfeedBtnFilter float-right"
-          onClick={() => joinOrLeave("leave")}
-        >
-          Leave class
-        </Button>
-      );
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  function handleScroll() {
-    const offsetHeight = document.documentElement.offsetHeight;
-    const scrollHeight = window.innerHeight;
-    const scrollTop = document.documentElement.scrollTop;
-
-    if (offsetHeight + scrollTop === scrollHeight) {
-      setSkip(5);
-      console.log("skip set");
-    }
-  }
 
   return (
     <div>
@@ -168,34 +60,24 @@ function NewsFeed() {
         <br />
         <div className="row">
           <div className="col-sm-8">
-            {isClassFeed ? (
-              <Header as="h2">{classInfo.completeTitle}</Header>
-            ) : null}
-
-            <CreateNewPost
-              classInfo={classInfo}
-              classes={classes}
-              enrollmentStatus={enrollmentStatus}
-              setPosts={setPosts}
-            />
             <Button
-              variant={filter.by == "hot" ? "dark" : "secondary"}
+              variant={filter.active == "hot" ? "dark" : "secondary"}
               className="newsfeedBtnFilter"
-              onClick={() => setFilter({ by: "hot" })}
+              onClick={() =>
+                setFilter({ by: "/trending-posts", active: "hot" })
+              }
             >
               {" "}
-              <i className="fas fa-fire"></i> Trending
+              <i className="fas fa-fire"></i> Trending at Cornell
             </Button>
             <Button
-              variant={filter.by == "new" ? "dark" : "secondary"}
+              variant={filter.active == "new" ? "dark" : "secondary"}
               className="newsfeedBtnFilter"
-              onClick={() => setFilter({ by: "new" })}
+              onClick={() => setFilter({ by: "/new", active: "new" })}
             >
               {" "}
-              <i className="fas fa-rss"></i> New
+              <i className="fas fa-rss"></i> New at Cornell
             </Button>
-
-            {leaveOrJoinBtn()}
 
             <div className="clearfix"></div>
 
@@ -211,6 +93,16 @@ function NewsFeed() {
                 return <NewsFeedPost post={post} />;
               })
             )}
+            {skip != posts.length ? (
+              <div className="text-center">
+                <button
+                  onClick={() => setSkip(posts.length)}
+                  className="newsfeedBtnFilter btn btn-secondary center"
+                >
+                  Check for more
+                </button>
+              </div>
+            ) : null}
           </div>
           <div className="col-sm-3">
             <SideBar classes={classes} classInfo={classInfo} />

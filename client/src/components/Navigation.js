@@ -15,7 +15,6 @@ function Navigation(props) {
       fetch(`${process.env.REACT_APP_BACKEND_URL}/search/class?&query=${query}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           resolve(
             data.map(({ subject, term, catalogNbr, completeTitle }) => ({
               value: { subject: subject, catalogNbr: catalogNbr, term: term },

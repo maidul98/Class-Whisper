@@ -23,15 +23,17 @@ router.get("/single", function (req, res, next) {
 });
 
 /**
- * Get all posts
+ * Get all posts ordered by time
  */
-router.get("/", function (req, res, next) {
+router.get("/new", function (req, res, next) {
+  const skip =
+    req.query.skip && /^\d+$/.test(req.query.skip) ? Number(req.query.skip) : 0;
   let query = {};
   if (req.query.classId != undefined) {
     query = { class_id: req.query.classId };
   }
 
-  Post.find(query)
+  Post.find(query, undefined, { skip, limit: 5 })
     .populate("class_id")
     .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
@@ -83,24 +85,27 @@ router.get("/trending-posts", function (req, res, next) {
     .catch((error) => console.log(error));
 });
 
-/** Make a post */
+/**
+ * Make a post
+ */
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   async function (req, res, next) {
-    let reCap = await axios(`https://www.google.com/recaptcha/api/siteverify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `secret=${"6LeiO80ZAAAAAJAzD8cVxV6GiWjSwFpdIHDn_PJA"}&response=${
-        req.body["reCAPTCHA"]
-      }`,
-    });
-
-    if (reCap.data.success == false) {
-      console.log("nope");
-      return res.status(500);
+    const secret = process.env.GOOGLE_RECAP;
+    const response = req.body["reCAPTCHA"];
+    const validateRecaptcha = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${response}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+        },
+      }
+    );
+    console.log(validateRecaptcha.data);
+    if (validateRecaptcha.data.success == false) {
+      return res.status(500).send({ msg: "Failed challage, please try again" });
     }
 
     Class.findOne({ _id: req.body.class, enrollments: { $in: [req.user._id] } })

@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 import NewsFeed from "./components/NewsFeed";
+import ClassNewsFeed from "./components/ClassNewsFeed";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import SinglePost from "./components/SinglePost";
@@ -43,7 +44,7 @@ function App() {
         <Route
           exact
           path="/class/:term/:subject/:classNum"
-          component={NewsFeed}
+          component={ClassNewsFeed}
         />
 
         <ProtectedRoute exact path="/app" component={Login} />

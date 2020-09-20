@@ -187,7 +187,9 @@
   margin-bottom: 20px;
 }
 
-.class-short-description {
+.joinClass {
+  background-color: #2fcc8b !important;
+  border-color: #2fcc8b !important;
 }
 
 /*============== CREATE POST ==========*/
