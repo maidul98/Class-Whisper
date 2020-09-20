@@ -33,7 +33,7 @@ router.get("/new", function (req, res, next) {
     query = { class_id: req.query.classId };
   }
 
-  Post.find(query, undefined, { skip, limit: 5 })
+  Post.find(query, undefined, { skip, limit: 20 })
     .populate("class_id")
     .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
@@ -65,7 +65,7 @@ router.get("/trending-posts", function (req, res, next) {
   const skip =
     req.query.skip && /^\d+$/.test(req.query.skip) ? Number(req.query.skip) : 0;
 
-  Post.find(query, undefined, { skip, limit: 5 })
+  Post.find(query, undefined, { skip, limit: 20 })
     .populate("class_id")
     .populate("votes")
     .populate({ path: "user", select: "-hash -salt" })
