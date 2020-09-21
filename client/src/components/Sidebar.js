@@ -58,10 +58,9 @@ function Sidebar({ history, classes, classInfo }) {
                 {" "}
                 Maidul Islam{" "}
               </a>{" "}
-              (Cornell '21) to provide an avenue for anonymized class specific
-              communication. It allows students to freely share and discuss
-              their thoughts in an organized fashion. Under no circumstance will
-              user data be shared.
+              (Cornell '21) to foster communities within classes at Cornell. It
+              allows students to freely share and discuss their thoughts in an
+              organized fashion. Under no circumstance will user data be shared.
             </Card.Text>
           </Card.Body>
         </Card>
