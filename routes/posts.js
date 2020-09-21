@@ -12,7 +12,7 @@ const utils = require("../lib/utils");
  */
 router.get("/single", function (req, res, next) {
   Post.findById(req.query.postId)
-    .populate({ path: "user", select: "-hash -salt" })
+    .populate({ path: "user", select: "-hash -salt -email" })
     .populate("class_id")
     .populate("votes")
     .populate("class_id")
@@ -36,7 +36,7 @@ router.get("/new", function (req, res, next) {
   Post.find(query, undefined, { skip, limit: 20 })
     .populate("class_id")
     .populate("votes")
-    .populate({ path: "user", select: "-hash -salt" })
+    .populate({ path: "user", select: "-hash -salt -email" })
     .sort({ createdAt: -1 })
     .then((data) => res.send(data))
     .catch((error) => console.log(error));
@@ -68,7 +68,7 @@ router.get("/trending-posts", function (req, res, next) {
   Post.find(query, undefined, { skip, limit: 20 })
     .populate("class_id")
     .populate("votes")
-    .populate({ path: "user", select: "-hash -salt" })
+    .populate({ path: "user", select: "-hash -salt -email" })
     .then((posts) => {
       res.send(
         posts.sort(function (a, b) {

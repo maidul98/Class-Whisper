@@ -34,7 +34,6 @@ function NewsFeed() {
         .then((res) => res.json())
         .then((postData) =>
           setPosts((prev) => {
-            console.log(postData.length);
             return [...prev, ...postData];
           })
         )

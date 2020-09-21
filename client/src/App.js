@@ -13,18 +13,7 @@ import SinglePost from "./components/SinglePost";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { UserContext } from "./UserContext";
 import Auth from "./components/Auth";
-import ReactGA from "react-ga";
 import Notifications from "./components/Notifications";
-import { createBrowserHistory } from "history";
-
-const trackingId = "UA-178459989-1";
-ReactGA.initialize(trackingId);
-const history = createBrowserHistory();
-// Initialize google analytics page view tracking
-history.listen((location) => {
-  ReactGA.set({ page: location.pathname });
-  ReactGA.pageview(location.pathname);
-});
 
 function App() {
   const [user, setUser] = useState({});

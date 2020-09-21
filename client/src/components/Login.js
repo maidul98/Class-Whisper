@@ -19,12 +19,10 @@ function Login(props) {
       .then((res) => res.json())
       .then((userObj) => {
         if (userObj.user) {
-          console.log(userObj, "loggedin");
           setUser(userObj.user);
           localStorage.setItem("token", userObj.token);
           props.history.push("/");
         } else {
-          console.log(userObj);
         }
       })
       .catch(console.log);

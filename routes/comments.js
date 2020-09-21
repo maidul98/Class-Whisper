@@ -24,7 +24,9 @@ router.post("/", passport.authenticate("jwt", { session: false }), function (
           body: req.body.body,
         })
           .then(async (newComment) => {
-            newComment = await newComment.populate("user").execPopulate();
+            newComment = await newComment
+              .populate({ path: "user", select: "-hash -salt -email" })
+              .execPopulate();
 
             // update total comments for this post
             await Post.updateOne(
@@ -62,7 +64,7 @@ router.get("/", function (req, res, next) {
     post: req.query.id,
     parent: { $exists: false },
   })
-    .populate({ path: "user", select: "-hash -salt" })
+    .populate({ path: "user", select: "-hash -salt -email" })
     .populate("replies")
     .sort({ createdAt: -1 })
     .then((result) => {
@@ -89,7 +91,9 @@ router.post(
             parent: req.body.comment_parent_id,
           })
             .then(async (newReply) => {
-              newReply = await newReply.populate("user").execPopulate();
+              newReply = await newReply
+                .populate({ path: "user", select: "-hash -salt -email" })
+                .execPopulate();
               // update total comments for this post
               await Post.updateOne(
                 { _id: req.body.post_id },
@@ -136,7 +140,7 @@ router.get("/reply", function (req, res, next) {
   Comment.find({
     parent: req.query.parentId,
   })
-    .populate({ path: "user", select: "-hash -salt" })
+    .populate({ path: "user", select: "-hash -salt -email" })
     .sort({ createdAt: 1 })
     .then((result) => {
       if (result) {
