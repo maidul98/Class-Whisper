@@ -14,6 +14,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { UserContext } from "./UserContext";
 import Auth from "./components/Auth";
 import Notifications from "./components/Notifications";
+import Chat from "./components/Chat";
 
 function App() {
   const [user, setUser] = useState({});
@@ -46,6 +47,7 @@ function App() {
           path="/class/:term/:subject/:classNum"
           component={ClassNewsFeed}
         />
+        <Route exact path="/chat" component={Chat} />
 
         <ProtectedRoute exact path="/app" component={Login} />
       </UserContext.Provider>

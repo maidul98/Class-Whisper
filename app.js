@@ -6,6 +6,7 @@ const passport = require("passport");
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 const axios = require("axios");
+const socketio = require("socket.io");
 
 /**
  * -------------- GENERAL SETUP ----------------
@@ -130,5 +131,20 @@ Class.countDocuments(async function (err, count) {
    * -------------- SERVER ----------------
    */
 
-  app.listen(process.env.PORT || 3000);
+  const server = app.listen(process.env.PORT || 3000);
+
+  /**
+   * -------------- WEB SOCKET ----------------
+   */
+
+  const io = socketio.listen(server);
+
+  io.sockets.on("connection", function (socket) {
+    socket.on("join", (data) => {
+      console.log(data);
+    });
+    socket.on("disconnect", () => {
+      console.log("gone");
+    });
+  });
 });

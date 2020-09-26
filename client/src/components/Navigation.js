@@ -4,6 +4,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { UserContext } from "../UserContext";
 import AsyncSelect from "react-select/async";
 import { Button, Placeholder } from "semantic-ui-react";
+import io from "socket.io-client";
 var debounce = require("es6-promise-debounce");
 
 function Navigation(props) {
@@ -39,6 +40,11 @@ function Navigation(props) {
         setNotifCount(data.count);
       });
   }, []);
+
+  // useEffect(() => {
+  //   const socket = io("http://localhost:3000");
+  //   socket.emit(`notification-${user._id}`, { name: "maidul" });
+  // });
 
   return (
     <div className="navigation">

@@ -86,6 +86,50 @@ router.get("/trending-posts", function (req, res, next) {
 });
 
 /**
+ * Get all posts for all the classes user is apart of by trending
+ */
+
+router.get(
+  "/my-trending-posts",
+  passport.authenticate("jwt", { session: false }),
+  function (req, res, next) {
+    const skip =
+      req.query.skip && /^\d+$/.test(req.query.skip)
+        ? Number(req.query.skip)
+        : 0;
+
+    Class.find({ enrollments: { $in: [req.user._id] } })
+      .then((classes) => {
+        const class_ids = classes.map((current_class) => current_class._id);
+        Post.find({ class_id: { $in: class_ids } }, undefined, {
+          skip,
+          limit: 20,
+        })
+          .populate("class_id")
+          .populate("votes")
+          .populate({ path: "user", select: "-hash -salt -email" })
+          .then((posts) => {
+            res.send(
+              posts.sort(function (a, b) {
+                const scoreA = hot(a.votes.voteCounts, a.createdAt);
+                const scoreB = hot(b.votes.voteCounts, b.createdAt);
+
+                var comp = 0;
+                if (scoreA > scoreB) comp = -1;
+                else if (scoreA < scoreB) comp = 1;
+                return comp;
+              })
+            );
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => {
+        res.status(500);
+      });
+  }
+);
+
+/**
  * Make a post
  */
 router.post(

@@ -51,7 +51,6 @@ function SinglePost() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setComments((prev) => [data, ...prev]);
         setComment("");
       });

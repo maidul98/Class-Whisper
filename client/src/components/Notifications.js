@@ -3,6 +3,7 @@ import Toast from "react-bootstrap/Toast";
 import { Message } from "semantic-ui-react";
 import { LinkContainer } from "react-router-bootstrap";
 import Moment from "react-moment";
+import io from "socket.io-client";
 
 function Notifications(props) {
   const [notifications, setNotifications] = useState([]);

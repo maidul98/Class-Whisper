@@ -15,12 +15,18 @@ function NewsFeed() {
   const [classes, setClasses] = useState([]);
   const [classInfo, setClassInfo] = useState({});
   const [filter, setFilter] = useState({
-    by: "/trending-posts",
+    by: `/trending-posts`,
     active: "hot",
   });
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    })
       .then((res) => res.json())
       .then((postData) => setPosts(postData))
       .catch((error) => console.log(error));
@@ -29,7 +35,14 @@ function NewsFeed() {
   useEffect(() => {
     if (skip > 0) {
       fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}?skip=${skip}`
+        `${process.env.REACT_APP_BACKEND_URL}/posts${filter.by}?skip=${skip}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       )
         .then((res) => res.json())
         .then((postData) =>
@@ -53,12 +66,30 @@ function NewsFeed() {
       .then((data) => setClasses(data));
   }, []);
 
+  useEffect(() => {
+    if (user._id != undefined) {
+      setFilter({ by: "/my-trending-posts", active: "my-class" });
+    }
+  }, [user]);
+
   return (
     <div>
       <div className="newsFeedContainer">
         <br />
         <div className="row">
           <div className="col-sm-8">
+            {user._id != undefined ? (
+              <Button
+                variant={filter.active == "my-class" ? "dark" : "secondary"}
+                className="newsfeedBtnFilter"
+                onClick={() =>
+                  setFilter({ by: "/my-trending-posts", active: "my-class" })
+                }
+              >
+                {" "}
+                <i className="fas fa-fire"></i> My classes
+              </Button>
+            ) : null}
             <Button
               variant={filter.active == "hot" ? "dark" : "secondary"}
               className="newsfeedBtnFilter"
