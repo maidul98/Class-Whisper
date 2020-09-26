@@ -137,14 +137,14 @@ Class.countDocuments(async function (err, count) {
    * -------------- WEB SOCKET ----------------
    */
 
-  const io = socketio.listen(server);
+  // const io = socketio.listen(server);
 
-  io.sockets.on("connection", function (socket) {
-    socket.on("join", (data) => {
-      console.log(data);
-    });
-    socket.on("disconnect", () => {
-      console.log("gone");
-    });
-  });
+  // io.sockets.on("connection", function (socket) {
+  //   socket.on("join", (data) => {
+  //     console.log(data);
+  //   });
+  //   socket.on("disconnect", () => {
+  //     console.log("gone");
+  //   });
+  // });
 });
