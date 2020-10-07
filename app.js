@@ -16,6 +16,8 @@ var whitelist = [
   "http://localhost:3001",
   "http://classwhisper.com",
   "https://classwhisper.com",
+  "http://www.classwhisper.com",
+  "https://www.classwhisper.com",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
