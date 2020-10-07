@@ -56,25 +56,51 @@ function SinglePost() {
       });
   }
 
+  function handlePrivateMessageSubmit() {
+    console.log("heheheh");
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/messages/new`, {
+      method: "POST",
+      headers: authHeader,
+      body: JSON.stringify({
+        post_id: post?._id,
+        body: comment,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("sent message");
+        setComment("");
+      });
+  }
+
   return (
     <div>
       <div class="row">
         <div class="col-sm-6 offset-sm-3">
           <NewsFeedPost post={post} body={post?.body} />
           <div className="addComment">
-            <Form
-              onChange={(event) => setComment(event.target.value)}
-              onSubmit={handleCommentSubmit}
-            >
-              <Form.TextArea value={comment} />
-              <Button
-                className="pull-right"
-                content="Add Comment"
-                primary
-                disabled={user?._id ? false : true}
+            <Form>
+              <Form.TextArea
+                value={comment}
+                onChange={(event) => setComment(event.target.value)}
               />
-              <div className="clearfix"></div>
             </Form>
+            <br />
+            <div className="clearfix"></div>
+            <Button
+              className="pull-right"
+              content="Send as private message"
+              secondary
+              onClick={() => handlePrivateMessageSubmit()}
+            />
+            <Button
+              onClick={() => handleCommentSubmit()}
+              className="pull-right"
+              content="Add as comment"
+              primary
+              disabled={user?._id ? false : true}
+            />
+            <div className="clearfix"></div>
           </div>
           <div className="postComments">
             <Comments comments={comments} />

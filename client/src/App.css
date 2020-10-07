@@ -86,6 +86,12 @@
   white-space: pre-wrap;
 }
 
+.send-message {
+  background-color: gray;
+  padding: 5px;
+  cursor: pointer;
+}
+
 /*=======NEWS FEED LAYOUT========*/
 
 .newsFeedContainer {
@@ -214,6 +220,10 @@
 
 .card-body {
   padding: 0.8em !important;
+}
+
+.fade.toast.toast-notifs.show {
+  margin-top: 10px;
 }
 
 /*============= Search =========*/

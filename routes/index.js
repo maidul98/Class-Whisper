@@ -14,4 +14,6 @@ router.use("/notifications", require("./notifications"));
 
 router.use("/votes", require("./votes"));
 
+router.use("/messages", require("./messages"));
+
 module.exports = router;

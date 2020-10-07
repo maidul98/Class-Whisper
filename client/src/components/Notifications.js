@@ -4,9 +4,14 @@ import { Message } from "semantic-ui-react";
 import { LinkContainer } from "react-router-bootstrap";
 import Moment from "react-moment";
 import io from "socket.io-client";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import Chat from "./Chat";
+// MessageBox component
 
 function Notifications(props) {
   const [notifications, setNotifications] = useState([]);
+  const [key, setKey] = useState("home");
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/notifications/unread`, {
@@ -36,34 +41,46 @@ function Notifications(props) {
 
   return (
     <div className="newsFeedContainer">
-      <h1>Notifications</h1>
-      {notifications.length == 0 ? (
-        <Message info size={"huge"}>
-          <Message.Header>No notifications yet</Message.Header>
-          <p>Go be a little active and check back here 🤩</p>
-        </Message>
-      ) : null}
-      {notifications.map((notification) => {
-        return (
-          <Toast className="toast-notifs">
-            <Toast.Header>
-              <div className="mr-auto">
-                <strong>{notification?.sender?.username}</strong>
-                {` ${notification.action} ${notification?.preposition} `}
-                <LinkContainer to={`post/${notification?.post?._id}`}>
-                  <strong className="cursor">
-                    {notification?.post?.title}
-                  </strong>
-                </LinkContainer>
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+      >
+        <Tab eventKey="home" title="Notifications">
+          {notifications.length == 0 ? (
+            <Message info size={"huge"}>
+              <Message.Header>No notifications yet</Message.Header>
+              <p>Go be a little active and check back here 🤩</p>
+            </Message>
+          ) : null}
+          {notifications.map((notification) => {
+            return (
+              <div>
+                <Toast className="toast-notifs">
+                  <Toast.Header>
+                    <div className="mr-auto">
+                      <strong>{notification?.sender?.username}</strong>
+                      {` ${notification.action} ${notification?.preposition} `}
+                      <LinkContainer to={`post/${notification?.post?._id}`}>
+                        <strong className="cursor">
+                          {notification?.post?.title}
+                        </strong>
+                      </LinkContainer>
+                    </div>
+                    <small>
+                      <Moment fromNow>{notification.createdAt}</Moment>
+                    </small>
+                  </Toast.Header>
+                  <Toast.Body>{notification.body}</Toast.Body>
+                </Toast>
               </div>
-              <small>
-                <Moment fromNow>{notification.createdAt}</Moment>
-              </small>
-            </Toast.Header>
-            <Toast.Body>{notification.body}</Toast.Body>
-          </Toast>
-        );
-      })}
+            );
+          })}
+        </Tab>
+        <Tab eventKey="profile" title="Inbox">
+          <Chat />
+        </Tab>
+      </Tabs>
     </div>
   );
 }

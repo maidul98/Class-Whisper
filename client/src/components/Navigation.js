@@ -41,11 +41,6 @@ function Navigation(props) {
       });
   }, []);
 
-  // useEffect(() => {
-  //   const socket = io("http://localhost:3000");
-  //   socket.emit(`notification-${user._id}`, { name: "maidul" });
-  // });
-
   return (
     <div className="navigation">
       <div className="container">

@@ -11,7 +11,7 @@ function Register(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    fetch("/users/register", {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/users/register`, {
       method: "POST",
       body: JSON.stringify({
         username: username,

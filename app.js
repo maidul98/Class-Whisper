@@ -12,6 +12,17 @@ const socketio = require("socket.io");
  * -------------- GENERAL SETUP ----------------
  */
 
+var whitelist = ["http://localhost:3001", "http://classwhisper.com"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
 require("dotenv").config();
 
 var app = express();
@@ -50,6 +61,8 @@ require("./models/ClassEnrollment");
 require("./models/Comment");
 require("./models/Notifications");
 require("./models/Vote");
+require("./models/Conversation");
+require("./models/Message");
 
 // Passing the global passport object into the configuration function
 require("./config/passport")(passport);
@@ -61,7 +74,7 @@ app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 /**
  * -------------- ROUTES ----------------

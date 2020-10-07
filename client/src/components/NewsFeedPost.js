@@ -119,6 +119,7 @@ function NewsFeedPost({ post, body, history }) {
               <Moment fromNow className="postDate">
                 {post?.createdAt}
               </Moment>
+              {/* <span className="float-right send-message">Send message</span> */}
             </div>
             <LinkContainer to={`/post/${post?._id}`}>
               <div className="postTitle">

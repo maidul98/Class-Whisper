@@ -2,67 +2,85 @@ import React, { Component, useState, useContext, useEffect } from "react";
 import Toast from "react-bootstrap/Toast";
 import { Message } from "semantic-ui-react";
 import { LinkContainer } from "react-router-bootstrap";
-import Moment from "react-moment";
 import io from "socket.io-client";
-import { Launcher } from "react-chat-window";
+import "react-chat-elements/dist/main.css";
+import Button from "react-bootstrap/Button";
+import { ChatList, MessageList, Input } from "react-chat-elements";
 
 function Chat(props) {
-  const [messageList, setMessages] = useState([
-    {
-      author: "them",
-      type: "text",
-      data: {
-        text: "some text",
-      },
-    },
-    {
-      author: "me",
-      type: "emoji",
-      data: {
-        code: "someCode",
-      },
-    },
-    {
-      author: "me",
-      type: "file",
-      data: {
-        url: "somefile.mp3",
-        fileName: "Any old name",
-      },
-    },
-  ]);
+  const [message, setMessage] = useState({ id: undefined });
 
-  function _onMessageWasSent(message) {
-    setMessages((prev) => [...prev, message]);
-  }
-
-  function _sendMessage(text) {
-    if (text.length > 0) {
-      this.setState({
-        messageList: [
-          ...this.state.messageList,
-          {
-            author: "them",
-            type: "text",
-            data: { text },
-          },
-        ],
-      });
+  useEffect(() => {
+    if (message.id != undefined) {
+      console.log("selected a message");
     }
-  }
+  }, [message]);
 
   return (
     <div>
-      <Launcher
-        agentProfile={{
-          teamName: "react-chat-window",
-          imageUrl:
-            "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png",
-        }}
-        onMessageWasSent={_onMessageWasSent.bind(this)}
-        messageList={messageList}
-        showEmoji
-      />
+      <Button
+        variant="secondary"
+        className="newsfeedBtnFilter"
+        style={{ display: message.id == undefined ? "none" : null }}
+        onClick={() => setMessage({ id: undefined })}
+      >
+        Back
+      </Button>
+      <div style={{ display: message.id != undefined ? "none" : null }}>
+        <ChatList
+          onClick={(message) => setMessage({ id: message.id })}
+          className="chat-list"
+          dataSource={[
+            {
+              avatar:
+                "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
+              title: "theflyingdog",
+              subtitle: "What are you doing?",
+              date: new Date(),
+              unread: 0,
+              id: "hahaha",
+            },
+            {
+              avatar:
+                "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
+              title: "theflyingdog",
+              subtitle: "What are you doing?",
+              date: new Date(),
+              unread: 10,
+            },
+          ]}
+        />
+      </div>
+      <div style={{ display: message.id == undefined ? "none" : null }}>
+        <MessageList
+          className="message-list"
+          lockable={true}
+          toBottomHeight={"100%"}
+          dataSource={[
+            {
+              position: "right",
+              type: "text",
+              text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+              date: new Date(),
+            },
+            {
+              position: "left",
+              type: "text",
+              text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
+              date: new Date(),
+            },
+          ]}
+        />
+        <Input
+          placeholder="Type here..."
+          multiline={true}
+          rightButtons={
+            <Button color="white" backgroundColor="black">
+              Send
+            </Button>
+          }
+        />
+      </div>
     </div>
   );
 }

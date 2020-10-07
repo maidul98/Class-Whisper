@@ -69,6 +69,8 @@ function NewsFeed() {
   useEffect(() => {
     if (user._id != undefined) {
       setFilter({ by: "/my-trending-posts", active: "my-class" });
+    } else {
+      setFilter({ by: "/trending-posts", active: "hot" });
     }
   }, [user]);
 
@@ -114,9 +116,19 @@ function NewsFeed() {
             {posts.length == 0 ? (
               <Message info size={"huge"}>
                 <Message.Header>
-                  Looks like there aren't any posts yet
+                  {/* {
+                    filter.by = "my-class"
+                      ? "Looks like you haven't joined any classes yet"
+                      : "Looks like there aren't any posts yet"
+                  } */}
                 </Message.Header>
-                <p>Be brave and break the ice 😳</p>
+                {/* <p>
+                  {
+                    (filter.by = "my-class"
+                      ? "Join your classes by searching for them"
+                      : "Be brave and break the ice 😳")
+                  }
+                </p> */}
               </Message>
             ) : (
               posts.map((post) => {
