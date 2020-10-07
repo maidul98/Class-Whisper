@@ -6,13 +6,13 @@ const passport = require("passport");
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 const axios = require("axios");
-const socketio = require("socket.io");
+// const socketio = require("socket.io");
 
 /**
  * -------------- GENERAL SETUP ----------------
  */
 
-var whitelist = ["http://localhost:3001", "http://classwhisper.com"];
+// var whitelist = ["http://localhost:3001", "http://classwhisper.com"];
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
