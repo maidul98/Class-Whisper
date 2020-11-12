@@ -53,7 +53,7 @@ function Sidebar({ history, classes, classInfo }) {
           <Card.Header as="h6">Class Whisper</Card.Header>
           <Card.Body>
             <Card.Text>
-              Class Whisper is a multifaceted application designed/devloped by
+              Class Whisper is a multifaceted application designed/developed by
               <a href="https://www.linkedin.com/in/maidul98/" target={"_blank"}>
                 {" "}
                 Maidul Islam{" "}
