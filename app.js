@@ -152,7 +152,6 @@ Class.countDocuments(async function (err, count) {
    */
 
   const server = app.listen(process.env.PORT || 3000);
-
   /**
    * -------------- WEB SOCKET ----------------
    */
